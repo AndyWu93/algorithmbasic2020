@@ -3,6 +3,10 @@ package class03;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 反转链表
+ * 反转后，需要返回新的head
+ */
 public class Code01_ReverseList {
 
 	public static class Node {

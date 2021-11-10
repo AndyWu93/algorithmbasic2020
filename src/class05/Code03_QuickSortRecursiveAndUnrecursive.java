@@ -64,7 +64,10 @@ public class Code03_QuickSortRecursiveAndUnrecursive {
 		}
 	}
 
-	// 快排3.0 非递归版本
+	/**
+	 * 快排3.0 非递归版本
+	 * @param arr
+	 */
 	public static void quickSort2(int[] arr) {
 		if (arr == null || arr.length < 2) {
 			return;
@@ -75,10 +78,12 @@ public class Code03_QuickSortRecursiveAndUnrecursive {
 		int el = equalArea[0];
 		int er = equalArea[1];
 		Stack<Op> stack = new Stack<>();
+		/*先生成了两个子任务，压到栈里*/
 		stack.push(new Op(0, el - 1));
 		stack.push(new Op(er + 1, N - 1));
 		while (!stack.isEmpty()) {
 			Op op = stack.pop(); // op.l  ... op.r
+			/*L=R时表示只有一个数，不用排了*/
 			if (op.l < op.r) {
 				swap(arr, op.l + (int) (Math.random() * (op.r - op.l + 1)), op.r);
 				equalArea = netherlandsFlag(arr, op.l, op.r);

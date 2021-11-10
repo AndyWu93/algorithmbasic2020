@@ -1,5 +1,22 @@
 package class02;
 
+/**
+ * 异或运算
+ * 1. 满足交换律和结合律
+ * a^b=b^a;(a^b)^c=a^(b^c)=(a^c)^b
+ * 2. 同样一批数，无论什么顺序异或起来的结果一定一样
+ * 3.
+ * a^0=a;a^a=0;
+ * if a^b=c
+ * a=a^b^b=c^b=b^c
+ * b=a^b^a=c^a=a^c
+ *
+ * 交换律的运用（a!=b）
+ * a=甲，b=乙
+ * a=a^b	a=甲^乙，b=乙
+ * b=a^b	a=甲^乙，b=甲^乙^乙=甲^0=甲
+ * a=a^b	a=甲^乙^甲=乙^0=乙，b=甲
+ */
 public class Code01_Swap {
 	
 	public static void main(String[] args) {

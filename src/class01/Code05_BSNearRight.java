@@ -2,6 +2,9 @@ package class01;
 
 import java.util.Arrays;
 
+/**
+ * 同 Code05_BSNearLeft
+ */
 public class Code05_BSNearRight {
 
 	// 在arr上，找满足<=value的最右位置

@@ -4,6 +4,10 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
 
+/**
+ * 链表实现栈和队列，较简单
+ * 思路：用链表实现基本方法
+ */
 public class Code03_DoubleEndsQueueToStackAndQueue {
 
 	public static class Node<T> {
@@ -20,6 +24,10 @@ public class Code03_DoubleEndsQueueToStackAndQueue {
 		public Node<T> head;
 		public Node<T> tail;
 
+		/**
+		 * 基本方法：从头加入一个节点
+		 * @param value
+		 */
 		public void addFromHead(T value) {
 			Node<T> cur = new Node<T>(value);
 			if (head == null) {
@@ -32,6 +40,10 @@ public class Code03_DoubleEndsQueueToStackAndQueue {
 			}
 		}
 
+		/**
+		 * 基本方法：从尾加入一个节点
+		 * @param value
+		 */
 		public void addFromBottom(T value) {
 			Node<T> cur = new Node<T>(value);
 			if (head == null) {
@@ -44,6 +56,10 @@ public class Code03_DoubleEndsQueueToStackAndQueue {
 			}
 		}
 
+		/**
+		 * 基本方法：从头弹出一个节点
+		 * @return
+		 */
 		public T popFromHead() {
 			if (head == null) {
 				return null;
@@ -60,6 +76,10 @@ public class Code03_DoubleEndsQueueToStackAndQueue {
 			return cur.value;
 		}
 
+		/**
+		 * 基本方法：从尾弹出一个节点
+		 * @return
+		 */
 		public T popFromBottom() {
 			if (head == null) {
 				return null;
@@ -76,12 +96,20 @@ public class Code03_DoubleEndsQueueToStackAndQueue {
 			return cur.value;
 		}
 
+		/**
+		 * 基本方法：看链表有没有节点了
+		 * @return
+		 */
 		public boolean isEmpty() {
 			return head == null;
 		}
 
 	}
 
+	/**
+	 * 几个基本方法的运用
+	 * @param <T>
+	 */
 	public static class MyStack<T> {
 		private DoubleEndsQueue<T> queue;
 

@@ -1,5 +1,9 @@
 package class03;
 
+/**
+ * 删除链表中的某个值
+ * 删除的可能是头，所有该函数需要返回一个新的头
+ */
 public class Code02_DeleteGivenValue {
 
 	public static class Node {

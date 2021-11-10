@@ -1,5 +1,13 @@
 package class04;
 
+/**
+ * 针对数组中的任意数x，统计右边所有2倍之后依然小于x的数，求总个数
+ * 思路：对于任意数x，需要知道右边比自己的一半还小的数
+ * merge的时候，先统计一下个数，再进行merge
+ * 统计方式：左右各一个指针i,j，两个指针都不回退
+ * 来到i位置，看j能否往右滑动，然后结算右组滑过的所有数
+ * i++时每次累加，就是题解
+ */
 public class Code04_BiggerThanRightTwice {
 
 	public static int biggerTwice(int[] arr) {
@@ -23,11 +31,15 @@ public class Code04_BiggerThanRightTwice {
 		
 		int ans = 0;
 		// 目前囊括进来的数，是从[M+1, windowR)
+		/*windowR是指针，代表该数不符合要求了*/
 		int windowR = m + 1;
+		/*遍历L..M，左组的数*/
 		for (int i = L; i <= m; i++) {
 			while (windowR <= r && arr[i] > (arr[windowR] * 2)) {
+				/*windowR没有++前是符合要求的，最后一次++后不符合要求了*/
 				windowR++;
 			}
+			/*所以windowR需要减掉当前指针的数*/
 			ans += windowR - m - 1;
 		}
 		

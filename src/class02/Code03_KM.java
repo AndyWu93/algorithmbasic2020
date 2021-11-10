@@ -3,6 +3,13 @@ package class02;
 import java.util.HashMap;
 import java.util.HashSet;
 
+/**
+ * arr中只有两种数，出现了k次和m次，找出出现了k次的数(M>1,K<M)
+ * 要求额外空间复杂度O(1),时间复杂度O(N)
+ * 总体思路：
+ * 挑出所有数1-32位上的1，1-32位分别将这些1加起来，每一位的总数：
+ * 一定是m的倍数，如果不是，一定是k的倍数(只出现了K次的数有1)，或者%m后等于k（出现k次和m次的位上都有1）
+ */
 public class Code03_KM {
 
 	public static int test(int[] arr, int k, int m) {
@@ -27,6 +34,11 @@ public class Code03_KM {
 	// 请保证arr中，只有一种数出现了K次，其他数都出现了M次
 	public static int onlyKTimes(int[] arr, int k, int m) {
 		if (map.size() == 0) {
+			/*
+			* 生成一个map，
+			* key:在二进制下，一个位上是1，其他都是0（如10，100，1000，10000）
+			* value:这个1的位在第几位[0,31]
+			* */
 			mapCreater(map);
 		}
 		int[] t = new int[32];
@@ -34,15 +46,20 @@ public class Code03_KM {
 		// t[i] i位置的1出现了几个
 		for (int num : arr) {
 			while (num != 0) {
+				/*拿到num最右边的1*/
 				int rightOne = num & (-num);
 				t[map.get(rightOne)]++;
+				/*将num该位上的1变成0，后继续直到num所有的位上都是0*/
 				num ^= rightOne;
 			}
 		}
+		/*下面是把这个数每个位上的1找到，拼起来*/
 		int ans = 0;
 		for (int i = 0; i < 32; i++) {
+			/*出现m次的不用看了*/
 			if (t[i] % m != 0) {
 				if (t[i] % m == k) {
+					/*因为k<m，这里找到了出现k次以及出现了k次也出现了m次的数*/
 					ans |= (1 << i);
 				} else {
 					return -1;
@@ -50,6 +67,7 @@ public class Code03_KM {
 			}
 		}
 		if (ans == 0) {
+			/*如果结果是0，再确认一下，这里出现了k次的数是不是0*/
 			int count = 0;
 			for (int num : arr) {
 				if (num == 0) {

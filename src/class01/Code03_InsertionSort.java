@@ -2,6 +2,15 @@ package class01;
 
 import java.util.Arrays;
 
+/**
+ * 插入排序
+ * 思路：从第二个数开始，往后遍历，保证0->i位置有序
+ * 来到了i位置，需要将i位置的数，往前放到该放地方去：
+ * 从i-1位置j开始，依次向前看，
+ * 如果j位置的数比j+1位置的数大，就交换。
+ * 如果j位置的数比j+1位置的数小或者相等，就不用再往前了
+ * 复杂度：依赖数据状况，如果每个i位置的数都要向前推n-1个长度复杂度O(N^2)
+ */
 public class Code03_InsertionSort {
 
 	public static void insertionSort(int[] arr) {

@@ -2,6 +2,17 @@ package class03;
 
 import java.util.Stack;
 
+/**
+ * 用栈实现队列
+ * 思路：用两个栈来实现队列
+ * push栈
+ * pop栈
+ * 1. 加入数据时，加到push栈
+ * 2. 弹出数据时，将push栈倒入pop栈，弹出pop栈顶
+ * 倒数据注意点：
+ * a): 倒数据需要一次性将push栈倒空
+ * b): 只有当pop栈空了的时候，才能执行下一次倒数据
+ */
 public class Code06_TwoStacksImplementQueue {
 
 	public static class TwoStacksQueue {

@@ -2,6 +2,16 @@ package class01;
 
 import java.util.Arrays;
 
+/**
+ * 有序数组中，查找num是否存在
+ * 二分思路：只要能正确构建左右两侧的淘汰逻辑，你就可以二分；比如无序数组partition查找一个第k大的数
+ * 定义两个变量L,R来控制范围
+ * 开始while循环，循环中不断缩小L，R之间的距离
+ * 在一个范围中先找到中间点mid，
+ * 如果mid位置的数比num大，那要找的num一定在num左边，R=mid-1
+ * 如果mid位置的数比num小，那要找的num一定在num右边，R=mid+1
+ * 直到相等了返回true
+ */
 public class Code04_BSExist {
 
 	public static boolean exist(int[] sortedArr, int num) {
@@ -22,6 +32,7 @@ public class Code04_BSExist {
 				L = mid + 1;
 			}
 		}
+		/*因为L,R上有两个数，剩一个还没验*/
 		return sortedArr[L] == num;
 	}
 	

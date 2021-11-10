@@ -1,5 +1,17 @@
 package class04;
 
+/**
+ * 在一个数组中，一个数左边比它小的数的总和，叫数的小和，所有数的小和累加起来，叫数组小和。求数组小和
+ * 要求：复杂度O(N*logN)
+ * 思路：假设来到了i位置，需要累加左边比arr[i]小的数，可以转化为看i右边有多少比arr[i]大，产生多少个arr[i]
+ * 采用归并排序的流程，在merge过程中结算
+ * 对于每个数x，在每次merge的时候，都会看右组中有几个数比x大，就产生几个x
+ * merge的时候：
+ * 1.小的数先拷贝
+ * 2.相等的时候先拷贝右边，右边的指针右移，因为需要找到右组有几个数比左组当前数大
+ * 3.拷贝左边的数a的时候，结算小和，看右组指针以及后边有几个数，有几个数就生成了几个a
+ * 累加小和
+ */
 public class Code02_SmallSum {
 
 	public static int smallSum(int[] arr) {
@@ -20,6 +32,7 @@ public class Code02_SmallSum {
 		}
 		// l < r
 		int mid = l + ((r - l) >> 1);
+		/*左边的小和+右边的小和，加自己产生的小和*/
 		return 
 				process(arr, l, mid) 
 				+ 
@@ -28,14 +41,18 @@ public class Code02_SmallSum {
 				merge(arr, l, mid, r);
 	}
 
+	/*merge时产生小和，和归并排序只增加了两行代码*/
 	public static int merge(int[] arr, int L, int m, int r) {
 		int[] help = new int[r - L + 1];
 		int i = 0;
 		int p1 = L;
 		int p2 = m + 1;
+		/*收集小和*/
 		int res = 0;
 		while (p1 <= m && p2 <= r) {
+			/*左组小的时候，产生了 右组指针及往右 个左组指针的数*/
 			res += arr[p1] < arr[p2] ? (r - p2 + 1) * arr[p1] : 0;
+			/*相等的时候先拷贝右组*/
 			help[i++] = arr[p1] < arr[p2] ? arr[p1++] : arr[p2++];
 		}
 		while (p1 <= m) {

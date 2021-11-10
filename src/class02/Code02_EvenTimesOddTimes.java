@@ -2,6 +2,11 @@ package class02;
 
 public class Code02_EvenTimesOddTimes {
 
+	/**
+	 * 将所有的数都异或起来，就能找到出现奇数次的数
+	 * 因为出现偶数次的数跟自己异或都变成了0，0^x=x
+	 * @param arr
+	 */
 	// arr中，只有一种数，出现奇数次
 	public static void printOddTimesNum1(int[] arr) {
 		int eor = 0;
@@ -11,6 +16,13 @@ public class Code02_EvenTimesOddTimes {
 		System.out.println(eor);
 	}
 
+	/**
+	 * 1. 先把所有的数异或起来得到eor，eor一定等于a^b，其他的偶数个的数都异或变成0
+	 * 2. 找到eor最右侧的1，表明在这个位上a!=b，记为rightOne；x&-x就能得到最右侧的1
+	 * 3. arr中所有的数可以分为两类，一类是和rightOne一样，在那个位上是1，这类数包含一个a（或者b），其他的数都是偶数个；另一类在那个位上是0
+	 * 4. 将其中的一类数异或起来，就能得到a（或者b），再将其与eor异或，得到另一个奇数
+	 * @param arr
+	 */
 	// arr中，有两种数，出现奇数次
 	public static void printOddTimesNum2(int[] arr) {
 		int eor = 0;
@@ -29,6 +41,7 @@ public class Code02_EvenTimesOddTimes {
 		for (int i = 0 ; i < arr.length;i++) {
 			//  arr[1] =  111100011110000
 			// rightOne=  000000000010000
+			/*这一类数在rightOne上都是1，所以&rightOne一定不等于0*/
 			if ((arr[i] & rightOne) != 0) {
 				onlyOne ^= arr[i];
 			}

@@ -2,6 +2,11 @@ package class01;
 
 import java.util.Arrays;
 
+/**
+ * 选择排序
+ * 来到了i位置，遍历i+1到n-1，找到最小值，与i位置的数交换，i位置的数就排好了，i去下个位置
+ * 复杂度：每次搞定一个位置的数O(N^2)
+ */
 public class Code01_SelectionSort {
 
 	public static void selectionSort(int[] arr) {

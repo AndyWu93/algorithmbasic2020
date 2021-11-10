@@ -2,6 +2,16 @@ package class03;
 
 import java.util.Stack;
 
+/**
+ * 返回栈中的最小值，要求复杂度O(1)
+ * 思路： 用两个栈来实现
+ * 一个栈a用来存储数据
+ * 另一个栈b用来存储当前遇到的最小值：
+ * 1）添加一个数：当添加的数x小于b的栈顶，x压入b
+ * 2）添加一个数：当添加的数x大于b的栈顶，b的栈顶再次压入b
+ * 3）弹出一个数：a，b同时弹出
+ * 4）查看栈的最小值b.peek
+ */
 public class Code05_GetMinStack {
 
 	public static class MyStack1 {

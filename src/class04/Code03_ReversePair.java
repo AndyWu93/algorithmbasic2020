@@ -1,5 +1,14 @@
 package class04;
 
+/**
+ * 求数组逆序对个数
+ * 对于数组中任何数（a,b）是降序的，就称为逆序对
+ * 思路：对于任意数x，需要知道右边所有比x小的数
+ * merge的时候，从右往左merge
+ * 1. 大的数先拷贝
+ * 2. 相等的时候先拷贝右组：因为需要知道右组有多少个数比当前左组的小，所以移动右组的指针
+ * 3. 拷贝左组的时候结算所有的逆序对：arr[m+1]..arr[r]（右组开头到现在右指针的位置）都是arr[i]的逆序对
+ */
 public class Code03_ReversePair {
 
 	public static int reverPairNumber(int[] arr) {

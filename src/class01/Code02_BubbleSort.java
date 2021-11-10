@@ -2,6 +2,12 @@ package class01;
 
 import java.util.Arrays;
 
+/**
+ * 冒泡排序
+ * 方向遍历数组，来到了e位置
+ * 遍历0->e位置，相邻两个位置的值比较，较大的就换到后面去，遍历结束后e位置的数就排好了，e去前一个位置
+ * 复杂度：每次搞定一个位置的数O(N^2)
+ */
 public class Code02_BubbleSort {
 
 	public static void bubbleSort(int[] arr) {
