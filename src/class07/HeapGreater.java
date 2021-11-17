@@ -11,6 +11,7 @@ import java.util.List;
 public class HeapGreater<T> {
 
 	private ArrayList<T> heap;
+	/*给每个元素建立索引，元素需要是引用类型*/
 	private HashMap<T, Integer> indexMap;
 	private int heapSize;
 	private Comparator<? super T> comp;
@@ -53,11 +54,20 @@ public class HeapGreater<T> {
 		return ans;
 	}
 
+	/**
+	 * 高效删除：
+	 * 类似pop，先把要删除的元素和最后一个位置交换
+	 * 删掉最后一个元素，原位置调整
+	 * @param obj
+	 */
 	public void remove(T obj) {
 		T replace = heap.get(heapSize - 1);
 		int index = indexMap.get(obj);
 		indexMap.remove(obj);
 		heap.remove(--heapSize);
+		/*上面是把最后一个元素取出来，脱离堆结构，
+		如果最后一个元素就是obj，就结束了，
+		否则需要把最后一个元素插入删除的位置再调整*/
 		if (obj != replace) {
 			heap.set(index, replace);
 			indexMap.put(replace, index);
@@ -65,6 +75,9 @@ public class HeapGreater<T> {
 		}
 	}
 
+	/*
+	* 调整obj在堆结构中的位置
+	* */
 	public void resign(T obj) {
 		heapInsert(indexMap.get(obj));
 		heapify(indexMap.get(obj));

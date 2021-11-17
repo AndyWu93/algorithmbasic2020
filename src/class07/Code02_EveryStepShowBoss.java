@@ -37,6 +37,14 @@ public class Code02_EveryStepShowBoss {
 
 	}
 
+	/**
+	 * 复杂度：
+	 * 每个事件
+	 * 过一遍候选区O(logN)
+	 * 过一遍得奖区O(logK)
+	 * 取出得奖的人O(k)
+	 * O(N*(logN+logK+k))
+	 */
 	public static class WhosYourDaddy {
 		private HashMap<Integer, Customer> customers;
 		private HeapGreater<Customer> candHeap;
@@ -68,6 +76,7 @@ public class Code02_EveryStepShowBoss {
 				customers.remove(id);
 			}
 			if (!candHeap.contains(c) && !daddyHeap.contains(c)) {
+				/*加强堆高效增删改O(logN)*/
 				if (daddyHeap.size() < daddyLimit) {
 					c.enterTime = time;
 					daddyHeap.push(c);
@@ -125,6 +134,7 @@ public class Code02_EveryStepShowBoss {
 	public static List<List<Integer>> topK(int[] arr, boolean[] op, int k) {
 		List<List<Integer>> ans = new ArrayList<>();
 		WhosYourDaddy whoDaddies = new WhosYourDaddy(k);
+		/*建立好结构后，针对每个事件做两个操作*/
 		for (int i = 0; i < arr.length; i++) {
 			whoDaddies.operate(i, arr[i], op[i]);
 			ans.add(whoDaddies.getDaddies());
@@ -135,13 +145,16 @@ public class Code02_EveryStepShowBoss {
 	// 干完所有的事，模拟，不优化
 	public static List<List<Integer>> compare(int[] arr, boolean[] op, int k) {
 		HashMap<Integer, Customer> map = new HashMap<>();
+		/*候选*/
 		ArrayList<Customer> cands = new ArrayList<>();
+		/*得奖*/
 		ArrayList<Customer> daddy = new ArrayList<>();
 		List<List<Integer>> ans = new ArrayList<>();
 		for (int i = 0; i < arr.length; i++) {
 			int id = arr[i];
 			boolean buyOrRefund = op[i];
 			if (!buyOrRefund && !map.containsKey(id)) {
+				/*该时间点下ans与上一次事件保持一致*/
 				ans.add(getCurAns(daddy));
 				continue;
 			}
@@ -165,6 +178,7 @@ public class Code02_EveryStepShowBoss {
 			// c
 			// 下面做
 			if (!cands.contains(c) && !daddy.contains(c)) {
+				/*新人第一次购买*/
 				if (daddy.size() < k) {
 					c.enterTime = i;
 					daddy.add(c);
@@ -173,6 +187,7 @@ public class Code02_EveryStepShowBoss {
 					cands.add(c);
 				}
 			}
+			/*把0的删掉*/
 			cleanZeroBuy(cands);
 			cleanZeroBuy(daddy);
 			cands.sort(new CandidateComparator());
@@ -183,18 +198,21 @@ public class Code02_EveryStepShowBoss {
 		return ans;
 	}
 
+	/*调整候选区和得奖区*/
 	public static void move(ArrayList<Customer> cands, ArrayList<Customer> daddy, int k, int time) {
 		if (cands.isEmpty()) {
 			return;
 		}
 		// 候选区不为空
 		if (daddy.size() < k) {
+			/*直接把候选区的老大移过来，重置时间*/
 			Customer c = cands.get(0);
 			c.enterTime = time;
 			daddy.add(c);
 			cands.remove(0);
 		} else { // 等奖区满了，候选区有东西
 			if (cands.get(0).buy > daddy.get(0).buy) {
+				/*两个区的老大pk，需要的话调换，重置时间*/
 				Customer oldDaddy = daddy.get(0);
 				daddy.remove(0);
 				Customer newDaddy = cands.get(0);

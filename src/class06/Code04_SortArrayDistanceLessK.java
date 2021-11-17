@@ -3,6 +3,12 @@ package class06;
 import java.util.Arrays;
 import java.util.PriorityQueue;
 
+/**
+ * 几乎有序的数组排序，每个数移动最多K长度即可做到有序，求最佳方案
+ * 思路：前k个数一定存在最小值，准备一个k+1大小的堆，将前K个数加进去
+ * pop堆顶放在第一位，再加入一个数，pop堆顶放在第二位...
+ * O(N*logN)
+ */
 public class Code04_SortArrayDistanceLessK {
 
 	public static void sortedArrDistanceLessK(int[] arr, int k) {

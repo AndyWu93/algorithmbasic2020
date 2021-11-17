@@ -3,11 +3,25 @@ package class06;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
+/**
+ * 堆结构
+ * 对于任意位置i
+ * 左孩子index：2*i+1
+ * 右孩子index：2*i+2
+ * 父index：(i-1)/2
+ * 用变量heapSize控制堆大小
+ * push: 放在heapSize位置，再heapInsert：O(logN)二叉树的高度
+ * pop: 弹出0位置，将heapSize-1位置的数放到0位置，再heapify：O(logN)二叉树的高度
+ *
+ * 堆（完全二叉树）可以有重复值，有序表（平衡搜索二叉树）不能有重复值
+ *
+ */
 public class Code02_Heap {
 
 	public static class MyMaxHeap {
 		private int[] heap;
 		private final int limit;
+		/*heap数组中heapSize长度的值是堆结构*/
 		private int heapSize;
 
 		public MyMaxHeap(int limit) {
@@ -51,7 +65,7 @@ public class Code02_Heap {
 		// 移动到0位置，或者干不掉自己的父亲了，停！
 		private void heapInsert(int[] arr, int index) {
 			// [index]    [index-1]/2
-			// index == 0
+			/*index == 0：arr[0]>arr[0]不成立，将跳出循环*/
 			while (arr[index] > arr[(index - 1) / 2]) {
 				swap(arr, index, (index - 1) / 2);
 				index = (index - 1) / 2;

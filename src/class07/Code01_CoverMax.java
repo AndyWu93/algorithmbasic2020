@@ -4,8 +4,24 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
+/**
+ * 最多重合线段数
+ * 暴力解：找到所有线段所在的最大区域[a,b]，考察这个区域中每个.5，看在几个线段范围中
+ * 复杂度：O((b-a)*N)
+ *
+ * 优化方法：
+ * 1. 将所有线段按开始位置排序
+ * 2. 准备一个小根堆heap
+ * 3. 遍历所有线段，来到线段[a,b],
+ * 弹出heap中所有小于等于a的数，（含义：此时heap中的数都是之前线段的结尾，如果小于等于a，就无法穿过a，需要弹出）
+ * 加入b，
+ * 收集此时的heapSize，（此时的heapSize含义：如果重合区域必须以a作为左边界，有多少条线段会越过a向右）
+ * 复杂度：
+ * 所有线段遍历了一次，最多所有线段的结尾进出了一次heap：O(N*logN)
+ */
 public class Code01_CoverMax {
 
+	/*暴力解*/
 	public static int maxCover1(int[][] lines) {
 		int min = Integer.MAX_VALUE;
 		int max = Integer.MIN_VALUE;
@@ -14,8 +30,10 @@ public class Code01_CoverMax {
 			max = Math.max(max, lines[i][1]);
 		}
 		int cover = 0;
+		/*枚举每个.5*/
 		for (double p = min + 0.5; p < max; p += 1) {
 			int cur = 0;
+			/*遍历所有线段收集结果*/
 			for (int i = 0; i < lines.length; i++) {
 				if (lines[i][0] < p && lines[i][1] > p) {
 					cur++;
@@ -37,6 +55,7 @@ public class Code01_CoverMax {
 		int max = 0;
 		for (int i = 0; i < lines.length; i++) {
 			// lines[i] -> cur 在黑盒中，把<=cur.start 东西都弹出
+			/*把之前结尾小于此时线段start的都弹出*/
 			while (!heap.isEmpty() && heap.peek() <= lines[i].start) {
 				heap.poll();
 			}

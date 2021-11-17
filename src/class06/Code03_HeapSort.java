@@ -3,6 +3,19 @@ package class06;
 import java.util.Arrays;
 import java.util.PriorityQueue;
 
+/**
+ * 堆排序
+ * 1. 将数组调成大根堆
+ * a） 对arr中的每个数，从前到后用heapInsert
+ * 复杂度：O(N*logN) （若复杂度不是明确可以扩充数据量，比如从N->2N，看复杂度）
+ * b) 对arr中的每个数，从后往前用heapify
+ * 复杂度：
+ * T(N) =  N/2*1 + N/4*2 + N/8*3 +...
+ * 2*T(N) =  N*1 + N/2*2 + N/4*3 +...
+ * 相减后得到T(N) = N + N/2 + N/4 +...等比数列，最终收敛到O(N)
+ * 2. 大根堆的堆顶和最后一个数交换，堆的size--，再对堆顶heapify，直到size=0
+ * 复杂度：O(N*logN)
+ */
 public class Code03_HeapSort {
 
 	// 堆排序额外空间复杂度O(1)
@@ -19,7 +32,9 @@ public class Code03_HeapSort {
 			heapify(arr, i, arr.length);
 		}
 		int heapSize = arr.length;
+		/*堆顶放到尾部，堆缩小1*/
 		swap(arr, 0, --heapSize);
+		/*此时如果堆仍然有数，继续重复上述过程*/
 		// O(N*logN)
 		while (heapSize > 0) { // O(N)
 			heapify(arr, 0, heapSize); // O(logN)
