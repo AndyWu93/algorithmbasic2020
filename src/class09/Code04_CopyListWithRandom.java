@@ -2,6 +2,18 @@ package class09;
 
 import java.util.HashMap;
 
+/**
+ * 克隆带有random指针的lb
+ * 遍历lb，利用map给新老lb的节点建立一一对应
+ * 遍历lb，根据老lb的结构，在新lb上完成结构
+ *
+ * 进阶：时间复杂度O(N)，额外空间复杂度O(1)
+ * 通过将拷贝节点放在原节点后面，来达到一一对应
+ * 3个while遍历：
+ * 1.嵌入拷贝节点
+ * 2.根据老节点完成拷贝节点random的结构
+ * 3.分离lb：random指针新老互不相关，只需要分离next指针
+ */
 // 测试链接 : https://leetcode.com/problems/copy-list-with-random-pointer/
 public class Code04_CopyListWithRandom {
 

@@ -2,6 +2,11 @@ package class09;
 
 import java.util.ArrayList;
 
+/**
+ * 快慢指针求中点
+ * 把握两个指针起点的位置
+ * 如果连个指针同步起跑，slow返回中点或者中上点
+ */
 public class Code01_LinkedListMid {
 
 	public static class Node {

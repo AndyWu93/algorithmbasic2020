@@ -2,6 +2,17 @@ package class08;
 
 import java.util.Arrays;
 
+/**
+ * 基数排序
+ * 样本要求：10进制非负数（若有负数，可以统一都加成非负数再排序，排完再减掉）
+ * 流程：
+ * 遍历一遍arr，找到最大的数，看最大数是几位，遍历arr，将位数不足的数前面补0
+ * 准备编号为0~9的10个FIFO的桶
+ * 从个位开始，遍历arr，个位是几，就进几号桶，结束后，从0号桶开始，将数都倒出来
+ * 再到十位，重复以上流程
+ * ...
+ * 最终成为有序
+ */
 public class Code04_RadixSort {
 
 	// only for no-negative value
@@ -12,6 +23,7 @@ public class Code04_RadixSort {
 		radixSort(arr, 0, arr.length - 1, maxbits(arr));
 	}
 
+	/*求最大的数是几位数*/
 	public static int maxbits(int[] arr) {
 		int max = Integer.MIN_VALUE;
 		for (int i = 0; i < arr.length; i++) {
@@ -25,12 +37,31 @@ public class Code04_RadixSort {
 		return res;
 	}
 
+	/**
+	 * 在arr上index为L..R范围内排序
+	 * @param arr
+	 * @param L
+	 * @param R
+	 * @param digit 最大位数，固定参数
+	 */
 	// arr[L..R]排序  ,  最大值的十进制位数digit
 	public static void radixSort(int[] arr, int L, int R, int digit) {
 		final int radix = 10;
 		int i = 0, j = 0;
 		// 有多少个数准备多少个辅助空间
 		int[] help = new int[R - L + 1];
+		/*
+		* 从个位开始，实现入桶、出桶
+		* 出入桶优化：
+		* 1.准备一个长度为10的数组count，遍历arr，给该位上的数（0~9）统计频次
+		* 2.将count加工成累加和（前缀和）数组sum
+		* sum[i]：arr中当前位小于等于i的有几个
+		* 3.准备一个结果数组res，从后向前遍历arr，
+		* 来到某个数x，假设当前遍历的数的当前位的值时a
+		* 去sum中拿到sum[a],表示arr中当前位小于等于a的个数记为k，范围是0~k-1，
+		* 因为从后往前遍历，所以x应该放在这个范围的最后一个，即k-1
+		* 放完以后sum[a]--
+		* */
 		for (int d = 1; d <= digit; d++) { // 有多少位就进出几次
 			// 10个空间
 		    // count[0] 当前位(d位)是0的数字有多少个
@@ -41,17 +72,24 @@ public class Code04_RadixSort {
 			for (i = L; i <= R; i++) {
 				// 103  1   3
 				// 209  1   9
+				/*统计词频*/
 				j = getDigit(arr[i], d);
 				count[j]++;
 			}
 			for (i = 1; i < radix; i++) {
+				/*转为累加和数组*/
 				count[i] = count[i] + count[i - 1];
 			}
+			/*反向遍历*/
 			for (i = R; i >= L; i--) {
+				/*当前位*/
 				j = getDigit(arr[i], d);
+				/*当前位的数应该在哪个位置*/
 				help[count[j] - 1] = arr[i];
+				/*--*/
 				count[j]--;
 			}
+			/*help数组中的数拷贝回去，准备开始下个位*/
 			for (i = L, j = 0; i <= R; i++, j++) {
 				arr[i] = help[j];
 			}

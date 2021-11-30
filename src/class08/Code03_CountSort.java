@@ -2,6 +2,17 @@ package class08;
 
 import java.util.Arrays;
 
+/**
+ * 不基于比较的排序：
+ * 复杂度O(N)
+ * 基于比较的排序，复杂度极限O(N*logN)
+ * 1.计数排序
+ * 对样本数据有要求，样本的类型范围必须有限
+ * 举例：全公司人的年龄放在arr中，将arr排序
+ *
+ * 建立一个help数组，长度为年龄的范围，设定为0~200，遍历arr，在help中建立对arr中每个数的词频统计
+ * 通过help，从0位置开始生成排序后的数组。比如help[1]=2,就代表2个1 ...
+ */
 public class Code03_CountSort {
 
 	// only for 0~200 value

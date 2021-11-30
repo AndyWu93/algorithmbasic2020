@@ -2,6 +2,22 @@ package class09;
 
 import java.util.Stack;
 
+/**
+ * 给定一个单链表的头节点head，请判断该链表是否为回文结构。
+ * 笔试：
+ * 准备一个栈，遍历lb将每个元素放入栈中
+ * 遍历lb到midSize，同时弹出栈的元素，对比是否一样
+ *
+ * 面试：
+ * 1. 找到中点或上中点x位置
+ * 2. 将x指向null，将x+1位置的指针指向x，直到arr结尾
+ * 3. 准备两个指针L,R左右两端依次比对，直到L或者R来到null
+ * 4. 返回前将lb调回去
+ *
+ * 进阶：
+ * 将lb：abcdef变成afbecd
+ * 思路：还是找到上中点，将后面的指针反指，L,R左右两端依次生成新lb
+ */
 public class Code02_IsPalindromeList {
 
 	public static class Node {
@@ -13,11 +29,17 @@ public class Code02_IsPalindromeList {
 		}
 	}
 
+	/**
+	 * 用栈
+	 * @param head
+	 * @return
+	 */
 	// need n extra space
 	public static boolean isPalindrome1(Node head) {
 		Stack<Node> stack = new Stack<Node>();
 		Node cur = head;
 		while (cur != null) {
+			/*先全部放入栈中*/
 			stack.push(cur);
 			cur = cur.next;
 		}
@@ -55,6 +77,12 @@ public class Code02_IsPalindromeList {
 		return true;
 	}
 
+	/**
+	 * 最优解
+	 * 难点在于coding，步步惊心只有练习
+	 * @param head
+	 * @return
+	 */
 	// need O(1) extra space
 	public static boolean isPalindrome3(Node head) {
 		if (head == null || head.next == null) {
@@ -72,6 +100,7 @@ public class Code02_IsPalindromeList {
 		n2 = n1.next; // n2 -> right part first node
 		n1.next = null; // mid.next -> null
 		Node n3 = null;
+		/*逆序*/
 		while (n2 != null) { // right part convert
 			n3 = n2.next; // n3 -> save next node
 			n2.next = n1; // next of right node convert
@@ -81,6 +110,7 @@ public class Code02_IsPalindromeList {
 		n3 = n1; // n3 -> save last node
 		n2 = head;// n2 -> left first node
 		boolean res = true;
+		/*比对*/
 		while (n1 != null && n2 != null) { // check palindrome
 			if (n1.value != n2.value) {
 				res = false;
@@ -91,6 +121,7 @@ public class Code02_IsPalindromeList {
 		}
 		n1 = n3.next;
 		n3.next = null;
+		/*调回去*/
 		while (n1 != null) { // recover list
 			n2 = n1.next;
 			n1.next = n3;
