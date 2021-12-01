@@ -1,5 +1,15 @@
 package class12;
 
+/**
+ * 满二叉树
+ * 性质：高度为h的满二叉树，节点数为2^h-1
+ * 思路：
+ * 需要左右树的高度，和节点数
+ * 头节点拿到了这两个信息就能计算出是否满足性质
+ * INFO
+ * a.高度
+ * B.节点数
+ */
 public class Code04_IsFull {
 
 	public static class Node {
@@ -18,6 +28,7 @@ public class Code04_IsFull {
 		}
 		int height = h(head);
 		int nodes = n(head);
+		/*2^x <=> 1<<x*/
 		return (1 << height) - 1 == nodes;
 	}
 
@@ -35,6 +46,11 @@ public class Code04_IsFull {
 		return n(head.left) + n(head.right) + 1;
 	}
 
+	/**
+	 * 递归套路
+	 * @param head
+	 * @return
+	 */
 	public static boolean isFull2(Node head) {
 		if (head == null) {
 			return true;

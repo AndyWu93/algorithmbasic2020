@@ -3,6 +3,10 @@ package class11;
 import java.util.LinkedList;
 import java.util.Queue;
 
+/**
+ * 二叉树的宽度遍历
+ * 用队列实现
+ */
 public class Code01_LevelTraversalBT {
 
 	public static class Node {
@@ -20,13 +24,18 @@ public class Code01_LevelTraversalBT {
 			return;
 		}
 		Queue<Node> queue = new LinkedList<>();
+		/*1. 先把头放进去*/
 		queue.add(head);
 		while (!queue.isEmpty()) {
+			/*2. 弹出*/
 			Node cur = queue.poll();
+			/*3. cur业务*/
 			System.out.println(cur.value);
+			/*4. cur有左入左*/
 			if (cur.left != null) {
 				queue.add(cur.left);
 			}
+			/*5. cur有右入右*/
 			if (cur.right != null) {
 				queue.add(cur.right);
 			}

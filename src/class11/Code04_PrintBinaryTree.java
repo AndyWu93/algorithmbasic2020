@@ -1,5 +1,8 @@
 package class11;
 
+/**
+ * 福利函数，打印树，不再考了
+ */
 public class Code04_PrintBinaryTree {
 
 	public static class Node {

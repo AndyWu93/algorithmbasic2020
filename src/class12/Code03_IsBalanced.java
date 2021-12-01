@@ -1,5 +1,16 @@
 package class12;
 
+/**
+ * 判断平衡二叉树
+ * 思路：使用二叉树的递归套路
+ * 任意节点x需要满足3点要求
+ * 1.x左树是平的
+ * 2.x右树是平的
+ * 3.|x左树h-x右树h|<2
+ * 所以x需要向左树、右树要如下信息：
+ * a.是否平？
+ * b.树高
+ */
 public class Code03_IsBalanced {
 
 	public static class Node {
@@ -31,6 +42,11 @@ public class Code03_IsBalanced {
 		return Math.max(leftHeight, rightHeight) + 1;
 	}
 
+	/**
+	 * 二叉树的递归套路
+	 * @param head
+	 * @return
+	 */
 	public static boolean isBalanced2(Node head) {
 		return process(head).isBalanced;
 	}
@@ -47,16 +63,20 @@ public class Code03_IsBalanced {
 	
 	public static Info process(Node x) {
 		if(x == null) {
+			/*空树是高度为0的平衡二叉树*/
 			return new Info(true, 0);
 		}
+		/*直接从左右树拿info，为了封装自己的info返回*/
 		Info leftInfo = process(x.left);
 		Info rightInfo = process(x.right);
 		int height = Math.max(leftInfo.height, rightInfo.height)  + 1;
 		boolean isBalanced = true;
 		if(!leftInfo.isBalanced) {
+			/*左树不平，我肯定不平*/
 			isBalanced = false;
 		}
 		if(!rightInfo.isBalanced) {
+			/*右树不平，我肯定不平*/
 			isBalanced = false;
 		}
 		if(Math.abs(leftInfo.height - rightInfo.height) > 1) {

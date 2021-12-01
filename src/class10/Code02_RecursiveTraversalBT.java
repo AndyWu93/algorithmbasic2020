@@ -1,5 +1,10 @@
 package class10;
 
+/**
+ * 先序 对于任何子树 头左右
+ * 中序 对于任何子树 左头右
+ * 后序 对于任何子树 左右头
+ */
 public class Code02_RecursiveTraversalBT {
 
 	public static class Node {
@@ -12,6 +17,12 @@ public class Code02_RecursiveTraversalBT {
 		}
 	}
 
+	/**
+	 * 先序：头左右
+	 * 中序：左头右
+	 * 后续：左右头
+	 * @param head
+	 */
 	public static void f(Node head) {
 		if (head == null) {
 			return;

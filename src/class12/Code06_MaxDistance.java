@@ -4,6 +4,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
+/**
+ * 返回整棵树的最大距离（沿途经过的所有节点数量）
+ * 思路：递归套路
+ * 1.最大距离在x左边
+ * 2.最大距离在x右边
+ * 3.最大距离穿过x
+ * INFO:
+ * a.最大距离
+ * b.最大深度
+ */
 public class Code06_MaxDistance {
 
 	public static class Node {
@@ -16,6 +26,9 @@ public class Code06_MaxDistance {
 		}
 	}
 
+	/*
+	* 暴力解：穷举二叉树的所有两个节点，计算距离收集max
+	* */
 	public static int maxDistance1(Node head) {
 		if (head == null) {
 			return 0;
@@ -119,6 +132,11 @@ public class Code06_MaxDistance {
 //		return new Info(maxDistance, height);
 //	}
 
+	/**
+	 * 递归套路
+	 * @param head
+	 * @return
+	 */
 	public static int maxDistance2(Node head) {
 		return process(head).maxDistance;
 	}
@@ -136,14 +154,17 @@ public class Code06_MaxDistance {
 
 	public static Info process(Node x) {
 		if (x == null) {
+			/*空树好设置，最大距离和高度都是0*/
 			return new Info(0, 0);
 		}
 		Info leftInfo = process(x.left);
 		Info rightInfo = process(x.right);
+		/*设置高度*/
 		int height = Math.max(leftInfo.height, rightInfo.height) + 1;
 		int p1 = leftInfo.maxDistance;
 		int p2 = rightInfo.maxDistance;
 		int p3 = leftInfo.height + rightInfo.height + 1;
+		/*3种距离求max*/
 		int maxDistance = Math.max(Math.max(p1, p2), p3);
 		return new Info(maxDistance, height);
 	}

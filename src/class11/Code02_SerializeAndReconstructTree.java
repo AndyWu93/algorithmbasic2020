@@ -31,6 +31,12 @@ public class Code02_SerializeAndReconstructTree {
 		}
 	}
 
+	/**
+	 * 先序序列化
+	 * 重点：左右树是null，需要占一个位置
+	 * @param head
+	 * @return
+	 */
 	public static Queue<String> preSerial(Node head) {
 		Queue<String> ans = new LinkedList<>();
 		pres(head, ans);
@@ -39,6 +45,7 @@ public class Code02_SerializeAndReconstructTree {
 
 	public static void pres(Node head, Queue<String> ans) {
 		if (head == null) {
+			/*null节点*/
 			ans.add(null);
 		} else {
 			ans.add(String.valueOf(head.value));
@@ -47,6 +54,7 @@ public class Code02_SerializeAndReconstructTree {
 		}
 	}
 
+	/*没有中序序列化，会产生歧义，该方法无效*/
 	public static Queue<String> inSerial(Node head) {
 		Queue<String> ans = new LinkedList<>();
 		ins(head, ans);
@@ -79,6 +87,11 @@ public class Code02_SerializeAndReconstructTree {
 		}
 	}
 
+	/**
+	 * 先序反序列化
+	 * @param prelist
+	 * @return
+	 */
 	public static Node buildByPreQueue(Queue<String> prelist) {
 		if (prelist == null || prelist.size() == 0) {
 			return null;
@@ -89,6 +102,7 @@ public class Code02_SerializeAndReconstructTree {
 	public static Node preb(Queue<String> prelist) {
 		String value = prelist.poll();
 		if (value == null) {
+			/*如果遇到null，就返回null节点*/
 			return null;
 		}
 		Node head = new Node(Integer.valueOf(value));
@@ -120,16 +134,23 @@ public class Code02_SerializeAndReconstructTree {
 		return head;
 	}
 
+	/**
+	 * 宽度优先遍历序列化
+	 * @param head
+	 * @return
+	 */
 	public static Queue<String> levelSerial(Node head) {
 		Queue<String> ans = new LinkedList<>();
 		if (head == null) {
 			ans.add(null);
 		} else {
 			ans.add(String.valueOf(head.value));
+			/*宽度优先遍历用*/
 			Queue<Node> queue = new LinkedList<Node>();
 			queue.add(head);
 			while (!queue.isEmpty()) {
 				head = queue.poll(); // head 父   子
+				/*整体流程是宽度优先遍历，子节点进queue之前序列化，不要忘记子节点是null也要序列化*/
 				if (head.left != null) {
 					ans.add(String.valueOf(head.left.value));
 					queue.add(head.left);
@@ -147,18 +168,26 @@ public class Code02_SerializeAndReconstructTree {
 		return ans;
 	}
 
+	/**
+	 * 宽度优先遍历反序列化
+	 * @param levelList
+	 * @return
+	 */
 	public static Node buildByLevelQueue(Queue<String> levelList) {
 		if (levelList == null || levelList.size() == 0) {
 			return null;
 		}
 		Node head = generateNode(levelList.poll());
+		/*宽度优先遍历用*/
 		Queue<Node> queue = new LinkedList<Node>();
 		if (head != null) {
+			/*如果是null，就不用放入Queue了，后面直接结束*/
 			queue.add(head);
 		}
 		Node node = null;
 		while (!queue.isEmpty()) {
 			node = queue.poll();
+			/*接下来的两个节点，一定是该节点的左右子节点*/
 			node.left = generateNode(levelList.poll());
 			node.right = generateNode(levelList.poll());
 			if (node.left != null) {

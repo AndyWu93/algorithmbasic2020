@@ -2,6 +2,13 @@ package class12;
 
 import java.util.LinkedList;
 
+/**
+ * 是否是完全二叉树（本来就是满的，或者从左往后依次变满）
+ * 思路：
+ * 按层遍历
+ * 1.如果出现一个节点有右孩子没左孩子，返回false
+ * 2.如果遇到一个节点左右孩子不双全，后面遇到的必都是叶节点
+ */
 public class Code01_IsCBT {
 
 	public static class Node {
@@ -14,6 +21,11 @@ public class Code01_IsCBT {
 		}
 	}
 
+	/**
+	 * 按层遍历
+	 * @param head
+	 * @return
+	 */
 	public static boolean isCBT1(Node head) {
 		if (head == null) {
 			return true;
@@ -31,7 +43,8 @@ public class Code01_IsCBT {
 			if (
 			// 如果遇到了不双全的节点之后，又发现当前节点不是叶节点
 			    (leaf && (l != null || r != null)) 
-			    || 
+			    ||
+				/*有右无左*/
 			    (l == null && r != null)
 
 			) {
@@ -44,6 +57,7 @@ public class Code01_IsCBT {
 				queue.add(r);
 			}
 			if (l == null || r == null) {
+				/*一次开启永远开启*/
 				leaf = true;
 			}
 		}
