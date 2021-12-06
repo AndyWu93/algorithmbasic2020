@@ -4,6 +4,27 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
+/**
+ * 求给定两个节点a，b的最低公共祖先节点
+ * 暴力解：
+ * 遍历整个二叉树建立一张map，key:x节点，value：x的父节点
+ * 先将a的所有父节点放到set中，再沿途遍历b所有的父节点，找首个在set中的
+ *
+ * 递归套路：
+ * 对于任意节点x可能性
+ * 1.与x无关
+ *  a.a、b在左树
+ *  b.a、b在右树
+ *  c.x节点的树里a、b不全
+ * 2.与x有关
+ * 	a.左树发现了一个，右树发现了一个
+ * 	b.x为a，左树/右树发现了b
+ * 	c.x为b，左树/右树发现了a
+ * 	INFO
+ * 1.有没有a节点
+ * 2.有没有b节点
+ * 3.a、b的最低公共祖先节点
+ */
 public class Code03_lowestAncestor {
 
 	public static class Node {
@@ -49,6 +70,13 @@ public class Code03_lowestAncestor {
 		}
 	}
 
+	/**
+	 * 递归套路
+	 * @param head
+	 * @param a
+	 * @param b
+	 * @return
+	 */
 	public static Node lowestAncestor2(Node head, Node a, Node b) {
 		return process(head, a, b).ans;
 	}
@@ -73,12 +101,15 @@ public class Code03_lowestAncestor {
 		Info rightInfo = process(x.right, a, b);
 		boolean findA = (x == a) || leftInfo.findA || rightInfo.findA;
 		boolean findB = (x == b) || leftInfo.findB || rightInfo.findB;
+		/*先给个null*/
 		Node ans = null;
+		/*检查下左右树是不是已经找到了*/
 		if (leftInfo.ans != null) {
 			ans = leftInfo.ans;
 		} else if (rightInfo.ans != null) {
 			ans = rightInfo.ans;
 		} else {
+			/*如果都没找到，发现了a、b，x就是答案*/
 			if (findA && findB) {
 				ans = x;
 			}

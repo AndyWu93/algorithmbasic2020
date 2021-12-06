@@ -2,6 +2,21 @@ package class14;
 
 import java.util.HashSet;
 
+/**
+ * str只由x和.组成，x表示墙不能放灯，.表示街道可以放灯，一个灯可以照亮自己和左右两边，问照亮所有的街道需要几盏灯
+ * 思路：暴力递归可以做对数器，最优解为贪心
+ * 贪心流程：
+ * 从左往右尝试（最多需要考虑3个长度）
+ * 来到了i位置
+ * 1. 如果i位置是x，直接来到i+1位置
+ * 2. 如果i位置是.，需要看下i+1：
+ *  a.如果i+1位置是x，i位置必须放灯，来到i+2位置
+ *  b.如果i+1位置是.，需要看下i+2
+ *   1）如果i+2位置是x，i、i+1两个地方随便放，来到i+3位置
+ *   2）如果i+2位置是.，就放在i+1位置，照亮了i和i+2，来到i+3位置
+ * ...
+ * 直到来到n-1位置
+ */
 public class Code01_Light {
 
 	public static int minLight1(String road) {
@@ -43,10 +58,13 @@ public class Code01_Light {
 		int light = 0;
 		while (i < str.length) {
 			if (str[i] == 'X') {
+				/*直接来到i+1*/
 				i++;
 			} else {
+				/*不是x的话，后面这几点肯定要放一盏灯的*/
 				light++;
 				if (i + 1 == str.length) {
+					/*i位置就是最后一个需要放的灯*/
 					break;
 				} else { // 有i位置  i+ 1   X  .
 					if (str[i + 1] == 'X') {
@@ -59,6 +77,45 @@ public class Code01_Light {
 		}
 		return light;
 	}
+
+	public static int minLight3(String road) {
+		if(road == null || road.length()==0){
+			return 0;
+		}
+		return process3(road.toCharArray(),0,0,false);
+	}
+
+	/**
+	 * 已经来到了i位置，前面的灯都放好了，放了lights个
+	 * 把后面的都照亮的话，至少一共要放多少个
+	 * @param chars
+	 * @param i
+	 * @param lights
+	 * @param isLight
+	 * @return
+	 */
+	private static int process3(char[] chars, int i, int lights, boolean isLight) {
+		int length = chars.length;
+		if (i==length){
+			return lights;
+		}
+		if (isLight){
+			return process3(chars,i+1,lights,false);
+		}else if (chars[i]=='X'){
+			return process3(chars,i+1,lights,false);
+		}else {
+			//这里不亮，又是.
+			int res = Integer.MAX_VALUE;
+			//放灯
+			res = Math.min(res,process3(chars, i+1, lights+1, true));
+			//不放
+			if (i+1<length && chars[i+1]!='X'){
+				res = Math.min(res,process3(chars, i+2, lights+1, true));
+			}
+			return res;
+		}
+	}
+
 
 	// for test
 	public static String randomString(int len) {

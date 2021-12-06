@@ -2,6 +2,24 @@ package class13;
 
 import java.util.ArrayList;
 
+/**
+ * 最大子搜索二叉树的头节点
+ * 思路：递归套路
+ * 可能性
+ * 对于任意节点x
+ * 1.最大子搜索二叉树以x为头
+ * 	a.左树是bst，max
+ * 	b.右树是bst，min
+ * 2.最大子搜索二叉树不以x为头
+ * 	a.左树最大子搜索二叉树size，头节点
+ * 	b.右树最大子搜索二叉树size，头节点
+ * 	INFO
+ * 1.是否bst？可以转为最大搜索二叉树头节点=x.left/right
+ * 2.最大搜索二叉子树size
+ * 3.最大搜索二叉子树头节点
+ * 4.max
+ * 5.min
+ */
 public class Code02_MaxSubBSTHead {
 
 	public static class Node {

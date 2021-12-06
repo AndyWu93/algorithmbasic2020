@@ -2,6 +2,20 @@ package class13;
 
 import java.util.LinkedList;
 
+/**
+ * 是否是完全二叉树（本来就是满的，后者从左往右依次变满）
+ * 思路：递归套路
+ * 可能性：
+ * 对于任意节点x
+ * 1. 左树、右树都是满二叉树，且高度相等
+ * 2. 左树、右树都是满二叉树，且左树高度=右树高度+1
+ * 3. 左树是完全二叉树、右树都是满二叉树，且左树高度=右树高度+1
+ * 4. 左树是满二叉树、右树都是完全二叉树，且高度相等
+ * INFO
+ * 是否满二叉树
+ * 是否完全二叉树
+ * 高度
+ */
 public class Code01_IsCBT {
 
 	public static class Node {
@@ -71,8 +85,10 @@ public class Code01_IsCBT {
 		Info leftInfo = process(x.left);
 		Info rightInfo = process(x.right);
 		int height = Math.max(leftInfo.height, rightInfo.height) + 1;
+		/*左树是满右树是满，高度还一样*/
 		boolean isFull = leftInfo.isFull && rightInfo.isFull && leftInfo.height == rightInfo.height;
 		boolean isCBT = false;
+		/*满足这4种可能性的其中一种，就是CBT*/
 		if (leftInfo.isFull && rightInfo.isFull && leftInfo.height == rightInfo.height) {
 			isCBT = true;
 		} else if (leftInfo.isCBT && rightInfo.isFull && leftInfo.height == rightInfo.height + 1) {
