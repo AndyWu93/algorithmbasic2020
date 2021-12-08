@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * 给定一个二维数组，数组的规模m*n，空降位置数组，每出现一个位置，matrix中该位置变成1，此时计算一下此刻有几片湖（连成的1）
+ * 思路：
+ * 每出现一个位置时，并查集中添加1个集合，并和该集合上下左右位置看能不能合并
+ */
 // 本题为leetcode原题
 // 测试链接：https://leetcode.com/problems/number-of-islands-ii/
 // 所有方法都可以直接通过
@@ -13,6 +18,7 @@ public class Code03_NumberOfIslandsII {
 		UnionFind1 uf = new UnionFind1(m, n);
 		List<Integer> ans = new ArrayList<>();
 		for (int[] position : positions) {
+			/*每出现一个位置后，将该位置变成1后，计算湖的个数*/
 			ans.add(uf.connect(position[0], position[1]));
 		}
 		return ans;
@@ -59,6 +65,7 @@ public class Code03_NumberOfIslandsII {
 			int i1 = index(r1, c1);
 			int i2 = index(r2, c2);
 			if (size[i1] == 0 || size[i2] == 0) {
+				/*两个位置有一个不是'1'，不用合并*/
 				return;
 			}
 			int f1 = find(i1);
@@ -77,10 +84,13 @@ public class Code03_NumberOfIslandsII {
 
 		public int connect(int r, int c) {
 			int index = index(r, c);
+			/*size[index]!=0表示该位置之前空降过，不用再处理了*/
 			if (size[index] == 0) {
+				/*并查集中添加了一个集合*/
 				parent[index] = index;
 				size[index] = 1;
 				sets++;
+				/*上下左右合并去*/
 				union(r - 1, c, r, c);
 				union(r + 1, c, r, c);
 				union(r, c - 1, r, c);
