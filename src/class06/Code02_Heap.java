@@ -2,6 +2,7 @@ package class06;
 
 import java.util.Comparator;
 import java.util.PriorityQueue;
+import java.util.Queue;
 
 /**
  * 堆结构
@@ -12,6 +13,10 @@ import java.util.PriorityQueue;
  * 用变量heapSize控制堆大小
  * push: 放在heapSize位置，再heapInsert：O(logN)二叉树的高度
  * pop: 弹出0位置，将heapSize-1位置的数放到0位置，再heapify：O(logN)二叉树的高度
+ *
+ * heapInsert和heapify中的堆调整：
+ * 大根堆，在左右孩子中找大的，与父比较，大的上去，小的下来
+ * 小根堆，在左右孩子中找小的，与父比较，小的上去，大的下来
  *
  * 堆（完全二叉树）可以有重复值，有序表（平衡搜索二叉树）不能有重复值
  *
@@ -138,14 +143,14 @@ public class Code02_Heap {
 
 	}
 
-	
+
 	public static class MyComparator implements Comparator<Integer>{
 
 		@Override
 		public int compare(Integer o1, Integer o2) {
 			return o2 - o1;
 		}
-		
+
 	}
 	
 	public static void main(String[] args) {
@@ -167,43 +172,43 @@ public class Code02_Heap {
 		while(!heap.isEmpty()) {
 			System.out.println(heap.poll());
 		}
+
 		
-		
-		
-		
-		
-		
-		
+
+
+
+
+
 		int value = 1000;
 		int limit = 100;
 		int testTimes = 1000000;
 		for (int i = 0; i < testTimes; i++) {
 			int curLimit = (int) (Math.random() * limit) + 1;
 			MyMaxHeap my = new MyMaxHeap(curLimit);
-			RightMaxHeap test = new RightMaxHeap(curLimit);
+			Queue<Integer> test = new PriorityQueue<>(curLimit,(i1,i2)->i2-i1);
 			int curOpTimes = (int) (Math.random() * limit);
 			for (int j = 0; j < curOpTimes; j++) {
 				if (my.isEmpty() != test.isEmpty()) {
 					System.out.println("Oops!");
 				}
-				if (my.isFull() != test.isFull()) {
-					System.out.println("Oops!");
-				}
+//				if (my.isFull() != test.isFull()) {
+//					System.out.println("Oops!");
+//				}
 				if (my.isEmpty()) {
 					int curValue = (int) (Math.random() * value);
 					my.push(curValue);
-					test.push(curValue);
+					test.add(curValue);
 				} else if (my.isFull()) {
-					if (my.pop() != test.pop()) {
+					if (my.pop() != test.poll()) {
 						System.out.println("Oops!");
 					}
 				} else {
 					if (Math.random() < 0.5) {
 						int curValue = (int) (Math.random() * value);
 						my.push(curValue);
-						test.push(curValue);
+						test.add(curValue);
 					} else {
-						if (my.pop() != test.pop()) {
+						if (my.pop() != test.poll()) {
 							System.out.println("Oops!");
 						}
 					}
