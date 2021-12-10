@@ -1,7 +1,9 @@
 package class16;
 
 public class Edge {
+	/*边的权重，或者距离等*/
 	public int weight;
+	/*两个点*/
 	public Node from;
 	public Node to;
 

@@ -1,5 +1,8 @@
 package class16;
 
+/**
+ * 图有多重表示方法，掌握其中一种即可
+ */
 public class GraphGenerator {
 
 	// matrix 所有的边
@@ -16,6 +19,7 @@ public class GraphGenerator {
 			int weight = matrix[i][0];
 			int from = matrix[i][1];
 			int to = matrix[i][2];
+			/*先把两个点建出来，放到图里*/
 			if (!graph.nodes.containsKey(from)) {
 				graph.nodes.put(from, new Node(from));
 			}
@@ -24,11 +28,14 @@ public class GraphGenerator {
 			}
 			Node fromNode = graph.nodes.get(from);
 			Node toNode = graph.nodes.get(to);
+			/*拿到了两个点，再把边建好*/
 			Edge newEdge = new Edge(weight, fromNode, toNode);
+			/*建立好from和to的关系*/
 			fromNode.nexts.add(toNode);
 			fromNode.out++;
 			toNode.in++;
 			fromNode.edges.add(newEdge);
+			/*把边加到图里去*/
 			graph.edges.add(newEdge);
 		}
 		return graph;

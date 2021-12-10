@@ -4,6 +4,13 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 
+/**
+ * 求拓扑排序，给定了图的结构
+ * 思路2：
+ * 对于任意节点a，从它出发的最大深度为x
+ * 对于任意点b，从它出发的最大深度为y
+ * if x>y then a<=b(拓扑序)
+ */
 // OJ链接：https://www.lintcode.com/problem/topological-sorting
 public class Code03_TopologicalOrderDFS1 {
 
@@ -60,8 +67,10 @@ public class Code03_TopologicalOrderDFS1 {
 		}
 		int follow = 0;
 		for (DirectedGraphNode next : cur.neighbors) {
+			/*所有邻居中深度的最大值*/
 			follow = Math.max(follow, f(next, order).deep);
 		}
+		/*当前深度节点深度还需要+1*/
 		Record ans = new Record(cur, follow + 1);
 		order.put(cur, ans);
 		return ans;

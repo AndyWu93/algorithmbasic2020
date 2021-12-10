@@ -5,6 +5,14 @@ import java.util.HashSet;
 import java.util.PriorityQueue;
 import java.util.Set;
 
+/**
+ * 最小生成数 - p算法
+ * 从一个随机的点开始，解锁了该点的所有边
+ * 从目前解锁的所有边里，找一个权重最小的，看这边的to节点有没有被解锁
+ * 如果解锁了就不要这条边，如果没被解锁，解锁该to节点，同时要了这条边，to节点一旦解锁，它的所有边里都要解锁
+ * 在从目前解锁的所有边里，找一个权重最小的
+ * ...
+ */
 // undirected graph only
 public class Code05_Prim {
 
@@ -17,6 +25,11 @@ public class Code05_Prim {
 
 	}
 
+	/**
+	 * p算法
+	 * @param graph
+	 * @return
+	 */
 	public static Set<Edge> primMST(Graph graph) {
 		// 解锁的边进入小根堆
 		PriorityQueue<Edge> priorityQueue = new PriorityQueue<>(new EdgeComparator());
@@ -27,10 +40,11 @@ public class Code05_Prim {
 		
 		
 		Set<Edge> result = new HashSet<>(); // 依次挑选的的边在result里
-
+		/*这里使用for循环，是防止图里有多颗树，那就要把每一颗树的最小生成树都收集好*/
 		for (Node node : graph.nodes.values()) { // 随便挑了一个点
 			// node 是开始点
 			if (!nodeSet.contains(node)) {
+				/*解锁该点*/
 				nodeSet.add(node);
 				for (Edge edge : node.edges) { // 由一个点，解锁所有相连的边
 					priorityQueue.add(edge);
@@ -47,6 +61,7 @@ public class Code05_Prim {
 					}
 				}
 			}
+			/*如果图里一棵树，可以加beak提前结束，如果是森林，不能提前结束*/
 			// break;
 		}
 		return result;

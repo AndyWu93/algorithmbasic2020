@@ -8,6 +8,17 @@ import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.Stack;
 
+/**
+ * 最小生成数 - k算法
+ * 一个无向图中，选权重小的边，把树连接起来，求把树的节点都连接起来需要的权重总和
+ * 思路：
+ * 将边按权重排序，从小到大开始遍历，如果该边加上去会形成环，不要该边，否则要。最终所有不会形成环的边从小到大权重加起来就是题解
+ * 如何判断是否会形成环？
+ * 借助并查集
+ * 一开始所有的节点都是独立的集合，如果遍历到一条边，查询该边的两个节点是不是一个集合，不是的话合成一个集合，并留下该边，是一个集合丢弃该边
+ *
+ * 特点：需要遍历一遍所有的边，如果边特别多，也可以考虑p算法，但是差别不会太大
+ */
 //undirected graph only
 public class Code04_Kruskal {
 
@@ -80,6 +91,11 @@ public class Code04_Kruskal {
 
 	}
 
+	/**
+	 * k算法
+	 * @param graph
+	 * @return
+	 */
 	public static Set<Edge> kruskalMST(Graph graph) {
 		UnionFind unionFind = new UnionFind();
 		unionFind.makeSets(graph.nodes.values());
