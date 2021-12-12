@@ -1,5 +1,21 @@
 package class19;
 
+/**
+ * str1，str2的最长公共子序列
+ * 思路：动态规划，样本对应模型
+ * dp[i][j]:str1[0..i]和str2[0..j]的最长公共子序列长度
+ * 规模：do[n][m]
+ * dp[0][0]=str1[0]==str2[0]?1:0
+ * 首行：dp[0][j] = dp[0][j-1]==1?1:str1[0]==str2[j]?1:0
+ * 含义：str1[0]和str2[j]比较，一样的话表示有1个长度的公共子序列，注意一旦发现了1，以后都是1。更优写法dp[0][j]=str1[0]==str2[j]?1:dp[0][j-1]
+ * 首列：dp[i][0] = dp[i-1][0]==1?1:str1[i]==str2[0]?1:0
+ * 含义：str1[i]和str2[0]比较，一样的话表示有1个长度的公共子序列，注意一旦发现了1，以后都是1。更优写法dp[i][0]=str1[i]==str2[0]?1:dp[i-1][0]
+ * 普遍位置dp[i][j]:
+ * a.仅str1[i]加入考虑范围：dp[i][j-1]
+ * b.仅str2[j]加入考虑范围：dp[i-1][j]
+ * c.str1[i]、str2[j]加入考虑范围：dp[i-1][j-1]+str1[i]==str2[j]?1:0
+ * 依赖上边位置，左边位置，和左上角位置。从上往下，从左往右填写dp
+ */
 // 这个问题leetcode上可以直接测
 // 链接：https://leetcode.com/problems/longest-common-subsequence/
 public class Code04_LongestCommonSubsequence {

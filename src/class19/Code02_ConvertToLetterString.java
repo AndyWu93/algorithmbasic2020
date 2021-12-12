@@ -1,5 +1,16 @@
 package class19;
 
+/**
+ * 给定一个数组（0~9）组成的str，将数字（1~26）转化为字母（a~z），问有多少种转化方式
+ * 思路：动态dp，从左往右的尝试模型
+ * dp[i]:i位置之前的字符都转好了，str[i..n-1]有多少种转化方式
+ * 规模：dp[n+1]
+ * dp[n]=1：没有字符了，收集到了1种转化结果
+ * 普遍位置dp[i]:
+ * a.str[i]=='0' dp[i]=0:以0开头的字符串无法转
+ * b.str[i]!='0' dp[i]=dp[i+1]+dp[i+2] (dp[i+2]需要判断一下i和i+1位置组合起立的数字是否小于26才加上去)
+ * 从左往右填dp
+ */
 public class Code02_ConvertToLetterString {
 
 	// str只含有数字字符0~9
@@ -15,16 +26,19 @@ public class Code02_ConvertToLetterString {
 	// str[i.....]去转化，返回有多少种转化方法
 	public static int process(char[] str, int i) {
 		if (i == str.length) {
+			/*没有字符了，表示所有字符全部都转化完了，收集到1种方法*/
 			return 1;
 		}
 		// i没到最后，说明有字符
 		if (str[i] == '0') { // 之前的决定有问题
+			/*来到的i位置不能是0，说明之前的决定是无效方案*/
 			return 0;
 		}
 		// str[i] != '0'
-		// 可能性一，i单转
+		/*可能性一，i坐好了决定：单转*/
 		int ways = process(str, i + 1);
 		if (i + 1 < str.length && (str[i] - '0') * 10 + str[i + 1] - '0' < 27) {
+			/*可能性二：i和i+1位置组合起来转，上面是成立条件*/
 			ways += process(str, i + 2);
 		}
 		return ways;
@@ -42,6 +56,7 @@ public class Code02_ConvertToLetterString {
 		int[] dp = new int[N + 1];
 		dp[N] = 1;
 		for (int i = N - 1; i >= 0; i--) {
+			/*str[i]=='0'时，dp[i]=0*/
 			if (str[i] != '0') {
 				int ways = dp[i + 1];
 				if (i + 1 < str.length && (str[i] - '0') * 10 + str[i + 1] - '0' < 27) {

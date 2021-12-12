@@ -4,8 +4,19 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+/**
+ * 认识递归
+ * 打印全部子序列
+ * 递归设计：
+ * 针对每个位置，要或者不要，来到n位置时收集当前决策的结果
+ */
 public class Code03_PrintAllSubsquences {
 
+	/**
+	 * 收集全部子序列
+	 * @param s
+	 * @return
+	 */
 	// s -> "abc" ->
 	public static List<String> subs(String s) {
 		char[] str = s.toCharArray();
@@ -32,9 +43,15 @@ public class Code03_PrintAllSubsquences {
 		process1(str, index + 1, ans, path + String.valueOf(str[index]));
 	}
 
+	/**
+	 * 收集全部子序列，结果去一下重
+	 * @param s
+	 * @return
+	 */
 	public static List<String> subsNoRepeat(String s) {
 		char[] str = s.toCharArray();
 		String path = "";
+		/*收集器改成set就行*/
 		HashSet<String> set = new HashSet<>();
 		process2(str, 0, set, path);
 		List<String> ans = new ArrayList<>();

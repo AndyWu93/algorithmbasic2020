@@ -4,6 +4,19 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map.Entry;
 
+/**
+ * 迪克斯特拉算法（有向图，无负权重，可以有环）
+ * 给定一个出发点x，要求生成一张表，展示x到所有其他点的最小距离（x到不来的点，不用在这张表中，距离认为是正无穷）
+ * 思路：
+ * 准备一个map，记录所有的点到x的距离，准备一个set，记录已经结算过的点
+ * 先把x放入map中距离是0
+ * map中选出最小距离的点cur，距离为l
+ * cur所有的to边拿出来，依次更新map中每个to节点的距离
+ * 更新方式：如果l+to边结果比当前to节点记录的距离小，就更新，否则不更新
+ *
+ * 优化：map中选出最小距离的点，且需要排除selectedNodes。该方法可以通过加强堆达到O(logN)
+ * 加强堆使用方式：堆中弹出当前最小距离，这时更新堆里该点周边的点的最小距离，且需要自动调整堆结构
+ */
 // no negative weight
 public class Code01_Dijkstra {
 
@@ -12,6 +25,7 @@ public class Code01_Dijkstra {
 		distanceMap.put(from, 0);
 		// 打过对号的点
 		HashSet<Node> selectedNodes = new HashSet<>();
+		/*从当前map中选出距离最小的点，需要排除selectedNodes*/
 		Node minNode = getMinDistanceAndUnselectedNode(distanceMap, selectedNodes);
 		while (minNode != null) {
 			// 原始点 -> minNode(跳转点) 最小距离distance
@@ -19,8 +33,10 @@ public class Code01_Dijkstra {
 			for (Edge edge : minNode.edges) {
 				Node toNode = edge.to;
 				if (!distanceMap.containsKey(toNode)) {
+					/*不在map中说明原来的距离是正无穷*/
 					distanceMap.put(toNode, distance + edge.weight);
 				} else { // toNode
+					/*经过跳转点，如果距离更小了更新*/
 					distanceMap.put(edge.to, Math.min(distanceMap.get(toNode), distance + edge.weight));
 				}
 			}
@@ -58,7 +74,7 @@ public class Code01_Dijkstra {
 		// 堆！
 		private Node[] nodes;
 		// node -> 堆上的什么位置？
-		
+		/*当nodes中元素弹出时，该map中对应元素不要删除，而是将值改为-1，表示该元素进来过*/
 		private HashMap<Node, Integer> heapIndexMap;
 		private HashMap<Node, Integer> distanceMap;
 		private int size;
@@ -79,6 +95,7 @@ public class Code01_Dijkstra {
 		public void addOrUpdateOrIgnore(Node node, int distance) {
 			if (inHeap(node)) { // update
 				distanceMap.put(node, Math.min(distanceMap.get(node), distance));
+				/*距离只可能变小或者不变，所以只需要向上调整*/
 				insertHeapify(node, heapIndexMap.get(node));
 			}
 			if (!isEntered(node)) { // add
@@ -145,12 +162,20 @@ public class Code01_Dijkstra {
 	// 从head出发，所有head能到达的节点，生成到达每个节点的最小路径记录并返回
 	public static HashMap<Node, Integer> dijkstra2(Node head, int size) {
 		NodeHeap nodeHeap = new NodeHeap(size);
+		/*
+		* add：之前没有在堆里；
+		* update：需要更新最新的距离并调整堆；
+		* ignore：之前进过堆已经弹出去了，再遇到时
+		* */
 		nodeHeap.addOrUpdateOrIgnore(head, 0);
+		/*结果集*/
 		HashMap<Node, Integer> result = new HashMap<>();
 		while (!nodeHeap.isEmpty()) {
+			/*弹出的记录一定会收集*/
 			NodeRecord record = nodeHeap.pop();
 			Node cur = record.node;
 			int distance = record.distance;
+			/*收集之前把该点周边的点加进去，或者重新计算一下最小距离*/
 			for (Edge edge : cur.edges) {
 				nodeHeap.addOrUpdateOrIgnore(edge.to, edge.weight + distance);
 			}

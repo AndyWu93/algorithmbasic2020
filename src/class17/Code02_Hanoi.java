@@ -2,8 +2,34 @@ package class17;
 
 import java.util.Stack;
 
+/**
+ * 认识递归
+ * 汉诺塔问题：
+ * 给了abc3个柱子，把a柱子上面所有的盘子移动到c去，一次只能移动一个盘子，而且只能大盘子在小盘子小面，问给定n个盘子，打印移动轨迹
+ *
+ * 复杂度：n层，最优解移动了2^n-1步，O(2^N-1)
+ *
+ * 设计递归技巧：
+ * 设计一个函数，把这个函数当成黑盒来用，接下来就是黑盒要有明确的定义，以及黑盒该怎么用
+ */
 public class Code02_Hanoi {
 
+	/**
+	 * 思路：
+	 * 把1-n从a到c,
+	 * 那就写个方法f1，把1~n-1从a到b
+	 * 然后把n从a到c
+	 * 再写个方法f2，把1~n-2从b到c
+	 *
+	 * f1，f2该怎么写呢？使用同样的思路。最终6个方法相互嵌套就能解决问题
+	 * fa2c()
+	 * fa2b()
+	 * fb2c()
+	 * fb2a()
+	 * fc2a()
+	 * fc2b()
+	 * @param n
+	 */
 	public static void hanoi1(int n) {
 		leftToRight(n);
 	}
@@ -70,6 +96,12 @@ public class Code02_Hanoi {
 		midToLeft(n - 1);
 	}
 
+	/**
+	 * 优化：
+	 * 6个方法相互嵌套，可以通过增加参数的方式，使递归函数功能更强大
+	 * 于是，6个方法抽像成了1个方法
+	 * @param n
+	 */
 	public static void hanoi2(int n) {
 		if (n > 0) {
 			func(n, "left", "right", "mid");
@@ -80,8 +112,11 @@ public class Code02_Hanoi {
 		if (N == 1) { // base
 			System.out.println("Move 1 from " + from + " to " + to);
 		} else {
+			/*先把1~n-1移到other去*/
 			func(N - 1, from, other, to);
+			/*再将n移到了to*/
 			System.out.println("Move " + N + " from " + from + " to " + to);
+			/*最后把other上的1~n-1移动to去*/
 			func(N - 1, other, to, from);
 		}
 	}

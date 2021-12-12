@@ -2,6 +2,10 @@ package class19;
 
 import java.util.HashMap;
 
+/**
+ * 用字符串贴纸数组arr中的任意贴纸，每个贴纸有无数张，拼成一个给定的字符串str，贴纸可以剪开。问需要几张贴纸
+ *
+ */
 // 本题测试链接：https://leetcode.com/problems/stickers-to-spell-word
 public class Code03_StickersToSpellWord {
 

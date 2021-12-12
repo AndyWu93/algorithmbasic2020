@@ -1,5 +1,12 @@
 package class18;
 
+/**
+ * 长度为N的路，robot开始在start位置，要来到aim位置，规定只能走K步，问有几种走法
+ * 规定，1位置只能往2走，N位置只能往N-1走
+ * 思路：本题为动态规划，从左往右的尝试模型
+ * dp[i][j]含义：从i位置出发，走j步到达aim位置的方法数
+ * 规模dp[n+1][k+1]:可以从1~n位置出发，可以走0~k步。dp[0][0..k]无效位置不需要使用
+ */
 public class Code01_RobotWalk {
 
 	public static int ways1(int N, int start, int aim, int K) {
@@ -74,12 +81,21 @@ public class Code01_RobotWalk {
 			return -1;
 		}
 		int[][] dp = new int[N + 1][K + 1];
+		/*从aim位置出发，走了0步到aim位置，有1种方法，其他位置出发dp[0..n][0]=0*/
 		dp[aim][0] = 1;
+		/*
+		* 填表顺序：从上往下，从左往右
+		* 第一行填过了不用填
+		* 第一行和最后一行，根据题意dp[1][j] <=> dp[2][j-1],dp[n][j] <=> dp[n-1][j-1]
+		* */
 		for (int rest = 1; rest <= K; rest++) {
+			/*第一行*/
 			dp[1][rest] = dp[2][rest - 1];
 			for (int cur = 2; cur < N; cur++) {
+				/*普遍位置：可以往左或者往右，方法数求和*/
 				dp[cur][rest] = dp[cur - 1][rest - 1] + dp[cur + 1][rest - 1];
 			}
+			/*最后一行*/
 			dp[N][rest] = dp[N - 1][rest - 1];
 		}
 		return dp[start][K];
