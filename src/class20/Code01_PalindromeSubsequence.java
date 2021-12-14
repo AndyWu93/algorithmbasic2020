@@ -1,5 +1,14 @@
 package class20;
 
+/**
+ * 求str最长回文子序列长度
+ * 思路1，将str逆序变为str',求 str 和 str' 的最长公共子序列长度（样本对应模型）
+ *
+ * 思路2：范围尝试模型
+ * 样本对应模型：一般讨论两个样本的结尾
+ * 范围尝试模型：一般讨论范围的开头和结尾
+ *
+ */
 // 测试链接：https://leetcode.com/problems/longest-palindromic-subsequence/
 public class Code01_PalindromeSubsequence {
 
@@ -33,6 +42,11 @@ public class Code01_PalindromeSubsequence {
 		char[] str = s.toCharArray();
 		int N = str.length;
 		int[][] dp = new int[N][N];
+		/*
+		* 两条对角线填写技巧：
+		* 最后一行只要填一个值，先填了
+		* 从第0行到第n-2行，每行都填两个
+		* */
 		dp[N - 1][N - 1] = 1;
 		for (int i = 0; i < N - 1; i++) {
 			dp[i][i] = 1;
@@ -40,6 +54,10 @@ public class Code01_PalindromeSubsequence {
 		}
 		for (int L = N - 3; L >= 0; L--) {
 			for (int R = L + 2; R < N; R++) {
+				/*
+				* dp位置依赖优化，原本要比价4个值，分析依赖后发现坐下角的值不用参与比较
+				* 只需要比较左、下、还有第4种情况
+				* */
 				dp[L][R] = Math.max(dp[L][R - 1], dp[L + 1][R]);
 				if (str[L] == str[R]) {
 					dp[L][R] = Math.max(dp[L][R], 2 + dp[L + 1][R - 1]);

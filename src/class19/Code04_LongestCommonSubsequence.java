@@ -30,6 +30,15 @@ public class Code04_LongestCommonSubsequence {
 		return process1(str1, str2, str1.length - 1, str2.length - 1);
 	}
 
+	/**
+	 * 样本对应模型的理解：
+	 * 只关心样本1[0..i]，样本2[0..j]的数据
+	 * @param str1
+	 * @param str2
+	 * @param i
+	 * @param j
+	 * @return
+	 */
 	public static int process1(char[] str1, char[] str2, int i, int j) {
 		if (i == 0 && j == 0) {
 			return str1[i] == str2[j] ? 1 : 0;

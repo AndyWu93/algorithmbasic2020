@@ -4,6 +4,21 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
+/**
+ * 高难度聚合题
+ * 四个参数：arr, n, a, b
+ * arr[i]:第i号机器冲一杯咖啡需要的时间
+ * n：n个人需要咖啡
+ * a：洗杯子的机器洗一个杯子时间为a
+ * b：杯子自然挥发干净的时间为b
+ * 求从n个人同时来喝咖啡，到所有人杯子都干净的最短时间
+ *
+ * 解题思路：
+ * 第一步：先求出每个人最早拿到咖啡的时间数组，用堆，参考训练营第4期 class04.Code06_Coffee
+ * 第二步：面对第一步时间数组arr，求出最早洗完的时间
+ * 动态规划，业务限制模型模型
+ * 写递归时用从左往右的尝试模型思路，最后发现两个可变参数，其中一个参数变化范围需要按照业务来估计范围，所以是业务限制模型
+ */
 // 题目
 // 数组arr代表每一个咖啡机冲一杯咖啡的时间，每个咖啡机只能串行的制造咖啡。
 // 现在有n个人需要喝咖啡，只能用咖啡机来制造咖啡。
@@ -59,7 +74,9 @@ public class Code03_Coffee {
 
 	// 以下为贪心+优良暴力
 	public static class Machine {
+		/*开始时间点*/
 		public int timePoint;
+		/*冲一杯咖啡的时间*/
 		public int workTime;
 
 		public Machine(int t, int w) {
@@ -72,11 +89,20 @@ public class Code03_Coffee {
 
 		@Override
 		public int compare(Machine o1, Machine o2) {
+			/*比较方式为机器的两个时间之和的比较*/
 			return (o1.timePoint + o1.workTime) - (o2.timePoint + o2.workTime);
 		}
 
 	}
 
+	/**
+	 * 最优解
+	 * @param arr
+	 * @param n
+	 * @param a
+	 * @param b
+	 * @return
+	 */
 	// 优良一点的暴力尝试的方法
 	public static int minTime1(int[] arr, int n, int a, int b) {
 		PriorityQueue<Machine> heap = new PriorityQueue<Machine>(new MachineComparator());
@@ -93,16 +119,23 @@ public class Code03_Coffee {
 		return bestTime(drinks, a, b, 0, 0);
 	}
 
-	// drinks 所有杯子可以开始洗的时间
-	// wash 单杯洗干净的时间（串行）
-	// air 挥发干净的时间(并行)
-	// free 洗的机器什么时候可用
-	// drinks[index.....]都变干净，最早的结束时间（返回）
+	/*
+	* drinks 所有杯子可以开始洗的时间
+	* wash 单杯洗干净的时间（串行）
+	* air 挥发干净的时间(并行)
+	* free 洗的机器什么时候可用
+	* drinks[index.....]都变干净，最早的结束时间（返回）
+	* */
 	public static int bestTime(int[] drinks, int wash, int air, int index, int free) {
 		if (index == drinks.length) {
+			/*对于每个index，因为需要求max（140行代码），越界返回0不影响结果*/
 			return 0;
 		}
-		// index号杯子 决定洗
+		/*
+		* index号杯子 决定洗
+		* 自己变干净：开始洗的时间（max(自己喝完的时间，洗杯机空闲的时间)）+洗杯子的时间
+		* 剩余的变干净：递归调用，free的时间变成了自己洗干净的时间点
+		* */
 		int selfClean1 = Math.max(drinks[index], free) + wash;
 		int restClean1 = bestTime(drinks, wash, air, index + 1, selfClean1);
 		int p1 = Math.max(selfClean1, restClean1);
@@ -134,9 +167,14 @@ public class Code03_Coffee {
 		int N = drinks.length;
 		int maxFree = 0;
 		for (int i = 0; i < drinks.length; i++) {
+			/*为了拿到free的变化范围，先把所有咖啡机都选择去洗的最后时间求出来
+			* 求法：max(上一杯咖啡洗完的时间,当前咖啡杯开始洗的时间)+洗一杯咖啡杯的时间
+			* */
 			maxFree = Math.max(maxFree, drinks[i]) + wash;
 		}
+		/*index可以取到n，free可以从0开始*/
 		int[][] dp = new int[N + 1][maxFree + 1];
+		/*index=N时，都是0*/
 		for (int index = N - 1; index >= 0; index--) {
 			for (int free = 0; free <= maxFree; free++) {
 				int selfClean1 = Math.max(drinks[index], free) + wash;
@@ -144,6 +182,9 @@ public class Code03_Coffee {
 					break; // 因为后面的也都不用填了
 				}
 				// index号杯子 决定洗
+				/*这一行代码不能直接就写，要考虑selfClean1越界的情况，
+				* 所以在上面直接给过滤掉，是不需要填写的表格范围
+				* */
 				int restClean1 = dp[index + 1][selfClean1];
 				int p1 = Math.max(selfClean1, restClean1);
 				// index号杯子 决定挥发
@@ -153,6 +194,7 @@ public class Code03_Coffee {
 				dp[index][free] = Math.min(p1, p2);
 			}
 		}
+		/*从0号杯子可以开始洗的时间，洗杯机0时间点可用，全部洗完要多少时间*/
 		return dp[0][0];
 	}
 

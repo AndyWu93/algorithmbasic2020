@@ -1,5 +1,9 @@
 package class20;
 
+/**
+ * “马”从(0,0)位置出发，必须走k步,最后落在(x,y)上的方法数有多少种
+ *
+ */
 public class Code02_HorseJump {
 
 	// 当前来到的位置是（x,y）
@@ -28,6 +32,14 @@ public class Code02_HorseJump {
 		return ways;
 	}
 
+	/**
+	 * 分析依赖关系改动态规划：
+	 * 在纸上画出3坐标的图，分析可以直到，每个点依赖下一层的点
+	 * @param a
+	 * @param b
+	 * @param k
+	 * @return
+	 */
 	public static int dp(int a, int b, int k) {
 		int[][][] dp = new int[10][9][k + 1];
 		dp[a][b][0] = 1;
