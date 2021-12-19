@@ -3,6 +3,17 @@ package class21;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+/**
+ * 用货币数组arr中的货币组成aim，有几种方法（面值一样的货币都认为是相同的货币）
+ * 该题是上一题的进阶，上一题每个面值是无穷张，这一题每个面值规定了固定张数
+ *
+ * 本题依旧会出现枚举的依赖关系
+ * dp[i][j]: 来到第i位置货币，假设i位置货币有y张。
+ * 分析位置可以看到，dp[i][j-arr[i]]和dp[i][j]都是下一行Y位置个dp的值相加而来
+ * p[i][j]正好比dp[i][j-arr[i]]多了正下方的值即dp[i+1][j],少了y+1个位置的值即dp[i+1][j-(y+1)*arr[i]]
+ * 所以
+ * dp[i][j] = dp[i][j-arr[i]] + dp[i+1][j] - dp[i+1][j-(y+1)*arr[i]]
+ */
 public class Code04_CoinsWaySameValueSamePapper {
 
 	public static class Info {
@@ -15,6 +26,7 @@ public class Code04_CoinsWaySameValueSamePapper {
 		}
 	}
 
+	/*arr转化为面值及张数的方法*/
 	public static Info getInfo(int[] arr) {
 		HashMap<Integer, Integer> counts = new HashMap<>();
 		for (int value : arr) {
@@ -45,11 +57,18 @@ public class Code04_CoinsWaySameValueSamePapper {
 
 	// coins 面值数组，正数且去重
 	// zhangs 每种面值对应的张数
+	/*
+	* 从index位置到最后，组成rest的方法数，规定每个面值的张数
+	* */
 	public static int process(int[] coins, int[] zhangs, int index, int rest) {
 		if (index == coins.length) {
 			return rest == 0 ? 1 : 0;
 		}
 		int ways = 0;
+		/*
+		* 限制1：使用的张数不能超过rest
+		* 限制2：使用的张数不能超过规定好的
+		* */
 		for (int zhang = 0; zhang * coins[index] <= rest && zhang <= zhangs[index]; zhang++) {
 			ways += process(coins, zhangs, index + 1, rest - (zhang * coins[index]));
 		}
@@ -69,6 +88,7 @@ public class Code04_CoinsWaySameValueSamePapper {
 		for (int index = N - 1; index >= 0; index--) {
 			for (int rest = 0; rest <= aim; rest++) {
 				int ways = 0;
+				/*枚举形式的依赖需要优化*/
 				for (int zhang = 0; zhang * coins[index] <= rest && zhang <= zhangs[index]; zhang++) {
 					ways += dp[index + 1][rest - (zhang * coins[index])];
 				}
@@ -92,9 +112,11 @@ public class Code04_CoinsWaySameValueSamePapper {
 			for (int rest = 0; rest <= aim; rest++) {
 				dp[index][rest] = dp[index + 1][rest];
 				if (rest - coins[index] >= 0) {
+					/*左边dp[i][j-arr[i]]位置不越界，加上去*/
 					dp[index][rest] += dp[index][rest - coins[index]];
 				}
 				if (rest - coins[index] * (zhangs[index] + 1) >= 0) {
+					/*下一行，左边dp[i+1][j-(y+1)*arr[i]]位置不越界，减掉*/
 					dp[index][rest] -= dp[index + 1][rest - coins[index] * (zhangs[index] + 1)];
 				}
 			}

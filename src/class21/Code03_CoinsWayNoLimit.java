@@ -1,5 +1,17 @@
 package class21;
 
+/**
+ * 枚举情况的dp依赖关系，可以从依赖关系中找出去枚举的依赖关系
+ *
+ * 用面值数组arr中的货币组成aim，有几种方法（一个面值的货币可以取n张）
+ * 普遍位置：i位置用0张，1张，2张，...
+ * dp[i][j] = dp[i+1][j] + dp[i+1][j-arr[i]] + dp[i+1][j-2*arr[i]] + ...
+ * 此时必须优化。通过分析依赖关系将枚举变成1个位置
+ *
+ * 总结：
+ * 记忆化搜索和dp表，在没有枚举情况依赖关系时时间复杂度一样
+ *
+ */
 public class Code03_CoinsWayNoLimit {
 
 	public static int coinsWay(int[] arr, int aim) {
@@ -15,6 +27,7 @@ public class Code03_CoinsWayNoLimit {
 			return rest == 0 ? 1 : 0;
 		}
 		int ways = 0;
+		/*每个面值都可以用n张，但是不能超出rest的值*/
 		for (int zhang = 0; zhang * arr[index] <= rest; zhang++) {
 			ways += process(arr, index + 1, rest - (zhang * arr[index]));
 		}
@@ -31,6 +44,7 @@ public class Code03_CoinsWayNoLimit {
 		for (int index = N - 1; index >= 0; index--) {
 			for (int rest = 0; rest <= aim; rest++) {
 				int ways = 0;
+				/*出现了枚举形式的依赖，一定存在依赖的优化，可以从dp表中去寻找依赖关系*/
 				for (int zhang = 0; zhang * arr[index] <= rest; zhang++) {
 					ways += dp[index + 1][rest - (zhang * arr[index])];
 				}
@@ -49,9 +63,13 @@ public class Code03_CoinsWayNoLimit {
 		dp[N][0] = 1;
 		for (int index = N - 1; index >= 0; index--) {
 			for (int rest = 0; rest <= aim; rest++) {
-				dp[index][rest] = dp[index + 1][rest];
+				/*
+				 * 分析得到，枚举中出现的下一行众位置的和（除了正下方），
+				 * 其实就是本行左边某一个位置的值，因为他们的求值方式是一样的
+				 * */
+				dp[index][rest] = dp[index + 1][rest];/*正下方的先加上去*/
 				if (rest - arr[index] >= 0) {
-					dp[index][rest] += dp[index][rest - arr[index]];
+					dp[index][rest] += dp[index][rest - arr[index]];/*本行左边某个位置*/
 				}
 			}
 		}

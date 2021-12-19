@@ -1,5 +1,14 @@
 package class21;
 
+/**
+ * 用货币数组arr中的货币组成aim，有几种方法（面值一样的货币都认为是不同的货币）
+ * 从左往右的尝试模型
+ * dp[i][j]: 从i位置到结尾的货币，组成j货币数的方法数
+ * 规模：dp[N+1][aim+1]
+ * 普遍位置：
+ * dp[i][j] = dp[i+1][j]+dp[i+1][j-arr[i]]
+ *
+ */
 public class Code02_CoinsWayEveryPaperDifferent {
 
 	public static int coinWays(int[] arr, int aim) {
@@ -24,6 +33,7 @@ public class Code02_CoinsWayEveryPaperDifferent {
 		}
 		int N = arr.length;
 		int[][] dp = new int[N + 1][aim + 1];
+		/*来到了最后一个货币，正好需要组成0元货币，1种方法*/
 		dp[N][0] = 1;
 		for (int index = N - 1; index >= 0; index--) {
 			for (int rest = 0; rest <= aim; rest++) {
