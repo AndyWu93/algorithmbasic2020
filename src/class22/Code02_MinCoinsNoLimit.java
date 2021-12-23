@@ -1,5 +1,9 @@
 package class22;
 
+/**
+ * 面值数组arr，每个面值货币无数张，问组成aim，最少需要几张货币
+ *
+ */
 public class Code02_MinCoinsNoLimit {
 
 	public static int minCoins(int[] arr, int aim) {
@@ -14,6 +18,7 @@ public class Code02_MinCoinsNoLimit {
 			return rest == 0 ? 0 : Integer.MAX_VALUE;
 		} else {
 			int ans = Integer.MAX_VALUE;
+			/*for循环中控制一下，选择的张数总面值不能超过rest*/
 			for (int zhang = 0; zhang * arr[index] <= rest; zhang++) {
 				int next = process(arr, index + 1, rest - zhang * arr[index]);
 				if (next != Integer.MAX_VALUE) {
@@ -37,6 +42,13 @@ public class Code02_MinCoinsNoLimit {
 		for (int index = N - 1; index >= 0; index--) {
 			for (int rest = 0; rest <= aim; rest++) {
 				int ans = Integer.MAX_VALUE;
+				/*
+				* 这里的枚举需要优化：
+				* dp[i][j]的值是下一行，若干个值加上zhang后取最小
+				* 观察dp[i][j-zhang*arr[i]]的位置，同样也是下一行若干个值加上zhang后取最小
+				* 他们两个有重合的部分，只是dp[i][j-zhang*arr[i]]下一行若干个zhang都比dp[i][j]下一行若干个zhang少1
+				* 所以dp[i][j] = min(dp[i+1][j],dp[i][j-zhang*arr[i]]+1)
+				* */
 				for (int zhang = 0; zhang * arr[index] <= rest; zhang++) {
 					int next = dp[index + 1][rest - zhang * arr[index]];
 					if (next != Integer.MAX_VALUE) {
@@ -61,9 +73,13 @@ public class Code02_MinCoinsNoLimit {
 		}
 		for (int index = N - 1; index >= 0; index--) {
 			for (int rest = 0; rest <= aim; rest++) {
+				/*先等于下方的值*/
 				dp[index][rest] = dp[index + 1][rest];
-				if (rest - arr[index] >= 0 
+				/*如果左边位置不越界*/
+				if (rest - arr[index] >= 0
+						/*且值也不是系统最大值*/
 						&& dp[index][rest - arr[index]] != Integer.MAX_VALUE) {
+					/*那就和左边的值+1再pk一下*/
 					dp[index][rest] = Math.min(dp[index][rest], dp[index][rest - arr[index]] + 1);
 				}
 			}

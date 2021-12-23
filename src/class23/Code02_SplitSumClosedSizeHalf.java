@@ -1,5 +1,13 @@
 package class23;
 
+/**
+ * 将arr分成两个数组，要求两个数组的累加和尽量接近，返回较小的累加和
+ * 进阶：要求arr是奇数个，两数组长度相差1，arr是偶数个，两个数组等长（该题为字节原题）
+ * 思路：
+ * 这也是一个背包问题，多了一个个数的要求。题意就改成了：
+ * 偶数个：在arr中求累加和不超过sum(arr) / 2,且个数为n/2个 的累加和返回
+ * 奇数个：在arr中求累加和不超过sum(arr) / 2,max(个数为n/2个的累加和,个数为n/2+1个的累加和)返回
+ */
 public class Code02_SplitSumClosedSizeHalf {
 
 	public static int right(int[] arr) {
@@ -11,8 +19,10 @@ public class Code02_SplitSumClosedSizeHalf {
 			sum += num;
 		}
 		if ((arr.length & 1) == 0) {
+			/*偶数个时*/
 			return process(arr, 0, arr.length / 2, sum / 2);
 		} else {
+			/*奇数个时*/
 			return Math.max(process(arr, 0, arr.length / 2, sum / 2), process(arr, 0, arr.length / 2 + 1, sum / 2));
 		}
 	}
@@ -20,6 +30,7 @@ public class Code02_SplitSumClosedSizeHalf {
 	// arr[i....]自由选择，挑选的个数一定要是picks个，累加和<=rest, 离rest最近的返回
 	public static int process(int[] arr, int i, int picks, int rest) {
 		if (i == arr.length) {
+			/*没数了，这时候picks=0刚好，返回0，否则picks还有值就表示没有选到picks个，返回-1表示该方案无效*/
 			return picks == 0 ? 0 : -1;
 		} else {
 			int p1 = process(arr, i + 1, picks, rest);
@@ -51,13 +62,16 @@ public class Code02_SplitSumClosedSizeHalf {
 		for (int i = 0; i <= N; i++) {
 			for (int j = 0; j <= M; j++) {
 				for (int k = 0; k <= sum; k++) {
+					/*先全部置为-1*/
 					dp[i][j][k] = -1;
 				}
 			}
 		}
 		for (int rest = 0; rest <= sum; rest++) {
+			/*base case*/
 			dp[N][0][rest] = 0;
 		}
+		/*从下往上推*/
 		for (int i = N - 1; i >= 0; i--) {
 			for (int picks = 0; picks <= M; picks++) {
 				for (int rest = 0; rest <= sum; rest++) {

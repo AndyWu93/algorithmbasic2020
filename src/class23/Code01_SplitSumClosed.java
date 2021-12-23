@@ -1,5 +1,11 @@
 package class23;
 
+/**
+ * 将arr分成两个数组，要求两个数组的累加和尽量接近，返回较小的累加和
+ * 思路：转化为
+ * 在arr中求累加和不超过sum(arr) / 2 的累加和返回
+ * 背包问题
+ */
 public class Code01_SplitSumClosed {
 
 	public static int right(int[] arr) {
@@ -23,6 +29,7 @@ public class Code01_SplitSumClosed {
 			// 可能性2，要使用arr[i]
 			int p2 = 0;
 			if (arr[i] <= rest) {
+				/*要当前的数，但是当前的数不能大于rest*/
 				p2 = arr[i] + process(arr, i + 1, rest - arr[i]);
 			}
 			return Math.max(p1, p2);
