@@ -4,6 +4,28 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.LinkedList;
 
+/**
+ * 本题难度爆表，设计斜率优化中使用窗口求最小值。慎读
+ *
+ * arr是货币数组，其中的值都是正数。再给定一个正数aim。
+ * 每个值都认为是一张货币，(之前一个题目是每个值是一个面值，见class22.Code02_MinCoinsNoLimit)
+ * 返回组成aim的最少货币数
+ * 之前的题目的斜率优化：
+ * dp[i][j]:
+ * min(dp[i+1][j] + 0,dp[i+1][j-arr[i]] + 1,dp[i+1][j-2*arr[i]] + 2,dp[i+1][j-3*arr[i]] + 3...dp[i+1][0/越界前一个位置] + (j-arr[i])/arr[i])
+ * 比对左边一个位置：dp[i][j-arr[i]]:
+ * min(dp[i+1][j-arr[i]] + 0,dp[i+1][j-2*arr[i]] + 1,dp[i+1][j-3*arr[i]] + 2...dp[i+1][0/越界前一个位置] + (j-2*arr[i])/arr[i])
+ * 优化成了
+ * min(dp[i+1][j],dp[i][j-arr[i]]+1)
+ *
+ * 这一题不同的地方在于，min()中对比的个数并不是无限的，而是固定的x个
+ * 比如：
+ * arr[i],有x张
+ * dp[i][j]:
+ * min(dp[i+1][j] + 0,dp[i+1][j-arr[i]] + 1,dp[i+1][j-2*arr[i]] + 2,dp[i+1][j-3*arr[i]] + 3...dp[i+1][j-x*arr[i]])
+ * 因为是固定个值求min，
+ * 会出现一个窗口中求最小值的情况
+ */
 public class Code04_MinCoinsOnePaper {
 
 	public static int minCoins(int[] arr, int aim) {
@@ -102,6 +124,7 @@ public class Code04_MinCoinsOnePaper {
 				for (int zhang = 1; zhang * coins[index] <= aim && zhang <= zhangs[index]; zhang++) {
 					if (rest - zhang * coins[index] >= 0
 							&& dp[index + 1][rest - zhang * coins[index]] != Integer.MAX_VALUE) {
+						/*下一行多个值+张数，取最小值*/
 						dp[index][rest] = Math.min(dp[index][rest], zhang + dp[index + 1][rest - zhang * coins[index]]);
 					}
 				}
@@ -129,18 +152,21 @@ public class Code04_MinCoinsOnePaper {
 		// 虽然是嵌套了很多循环，但是时间复杂度为O(货币种数 * aim)
 		// 因为用了窗口内最小值的更新结构
 		for (int i = N - 1; i >= 0; i--) {
+			/*一个面值作为一个单位*/
 			for (int mod = 0; mod < Math.min(aim + 1, c[i]); mod++) {
 				// 当前面值 X
 				// mod  mod + x   mod + 2*x   mod + 3 * x
 				LinkedList<Integer> w = new LinkedList<>();
 				w.add(mod);
 				dp[i][mod] = dp[i + 1][mod];
+				/*col是跳着填的，跳的单位为一个面值*/
 				for (int r = mod + c[i]; r <= aim; r += c[i]) {
 					while (!w.isEmpty() && (dp[i + 1][w.peekLast()] == Integer.MAX_VALUE
 							|| dp[i + 1][w.peekLast()] + compensate(w.peekLast(), r, c[i]) >= dp[i + 1][r])) {
 						w.pollLast();
 					}
 					w.addLast(r);
+					/*窗口大小：当前货币只能用z[i]张，超过1张即过期*/
 					int overdue = r - c[i] * (z[i] + 1);
 					if (w.peekFirst() == overdue) {
 						w.pollFirst();
