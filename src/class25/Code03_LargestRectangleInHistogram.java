@@ -2,6 +2,14 @@ package class25;
 
 import java.util.Stack;
 
+/**
+ * 给定一个非负数组arr，代表直方图。返回直方图的最大长方形面积
+ * 题意解析：
+ * 给定一个高度的数组arr，每个位置代表该位置格子的高度，求哪个位置左右能够包含的长方形的格子最多，返回格子数量
+ * 解题思路：
+ * 对于arr中的任意一个位置，找出左右最近的比它小的高度，那是到不了的位置，结算格子数
+ * 栈中依然可以放一个值，当遇到与自己相等的时候弹出，结算。最后一个与自己相等的位置弹出时结算的值一定是对的
+ */
 // 测试链接：https://leetcode.com/problems/largest-rectangle-in-histogram
 public class Code03_LargestRectangleInHistogram {
 

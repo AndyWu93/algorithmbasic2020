@@ -5,7 +5,7 @@ import java.util.Map.Entry;
 import java.util.LinkedList;
 
 /**
- * 本题难度爆表，设计斜率优化中使用窗口求最小值。慎读
+ * 本题难度爆表，涉及斜率优化中使用窗口求最小值。慎读
  *
  * arr是货币数组，其中的值都是正数。再给定一个正数aim。
  * 每个值都认为是一张货币，(之前一个题目是每个值是一个面值，见class22.Code02_MinCoinsNoLimit)
