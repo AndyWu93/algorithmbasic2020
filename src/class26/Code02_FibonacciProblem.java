@@ -30,6 +30,9 @@ public class Code02_FibonacciProblem {
 		return res;
 	}
 
+	/**
+	 * 斐波那契数列，求f(n)
+	 */
 	// O(logN)
 	public static int f3(int n) {
 		if (n < 1) {
@@ -38,27 +41,36 @@ public class Code02_FibonacciProblem {
 		if (n == 1 || n == 2) {
 			return 1;
 		}
+		/*斐波那契数列的常数矩阵*/
 		// [ 1 ,1 ]
 		// [ 1, 0 ]
 		int[][] base = { 
 				{ 1, 1 }, 
 				{ 1, 0 } 
 				};
+		/*求出了矩阵^n-2*/
 		int[][] res = matrixPower(base, n - 2);
+		/*根据公式（见从斐波那契数列到严格递推式）f(n)= f2 * m[0][0] + f1 * m[1][0] */
 		return res[0][0] + res[1][0];
 	}
 
 	public static int[][] matrixPower(int[][] m, int p) {
+		/*储存结果的矩阵*/
 		int[][] res = new int[m.length][m[0].length];
 		for (int i = 0; i < res.length; i++) {
+			/*先把res变成单位矩阵，即对角线都是1*/
 			res[i][i] = 1;
 		}
-		// res = 矩阵中的1
-		int[][] t = m;// 矩阵1次方
+		/*t:矩阵1次方*/
+		int[][] t = m;
+		/*每次结束后p右移一位，因为最后那个位的值已经处理结束了*/
 		for (; p != 0; p >>= 1) {
+			/*(p & 1) != 0:说明p最右位是1*/
 			if ((p & 1) != 0) {
+				/*那就把此时的t乘进来*/
 				res = muliMatrix(res, t);
 			}
+			/*t与自己相乘*/
 			t = muliMatrix(t, t);
 		}
 		return res;
@@ -149,6 +161,28 @@ public class Code02_FibonacciProblem {
 		return res;
 	}
 
+	/**
+	 * 面试题
+	 * 第一年农场有1只成熟的母牛A，往后的每年：
+	 * 1）每一只成熟的母牛都会生一只母牛
+	 * 2）每一只新出生的母牛都在出生的第三年成熟
+	 * 3）每一只母牛永远不会死
+	 * 返回N年后牛的数量
+	 *
+	 * 递推式为
+	 * f(n) = f(n-1) + f(n-3)
+	 * 含义：去年所有的牛都活下来了，3年前的牛（f(n-3)）都成熟了生了牛
+	 * 前面几项
+	 * f1 = 1
+	 * f2 = 1 1的宝宝2
+	 * f3 = 1 2 1的宝宝3
+	 * f4 = 1 2 3 1的宝宝4
+	 * f5 = 1 2 3 4 1的宝宝5 2的宝宝6
+	 * f6 = 1 2 3 4 5 6 1的宝宝7 2的宝宝8 3的宝宝9
+	 *
+	 * 扩展，如果牛5年后会死则
+	 * f(n) = f(n-1) + f(n-3) - f(n-5)
+	 */
 	public static int c3(int n) {
 		if (n < 1) {
 			return 0;
