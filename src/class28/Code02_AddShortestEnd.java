@@ -1,5 +1,12 @@
 package class28;
 
+/**
+ * 任意一个字符串str，问需要在后面最少添加几个字符能够使其变成回文
+ * 思路：
+ * 先求以最后一个字符为结尾的最长回文长度是多长，得到长度后，该回文左边的部分，逆序后加在原str后面就成了回文
+ * 如何求出以最后一个字符为结尾的最长回文长度呢？
+ * 稍微改动一下manacher：当R到达右边界时，此时的C就是需要求的回文的中点。
+ */
 public class Code02_AddShortestEnd {
 
 	public static String shortestEnd(String s) {
