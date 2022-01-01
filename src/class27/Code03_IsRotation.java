@@ -1,5 +1,14 @@
 package class27;
 
+/**
+ * 判断是s1,s2是否互为旋转串
+ * 旋转串含义：
+ * 把前面0-n长度的字符拿出来，放到后面，形成s2，那s1s2就互为旋转串
+ * 暴力解：从0位置开始依次往后转，再比对
+ * 最优解：
+ * 将s1自己拼接自己，形成一个长度为2N的str
+ * s1的任何旋转串，一定是str的子串。所以直接求s2是不是str的子串就行了
+ */
 public class Code03_IsRotation {
 
 	public static boolean isRotation(String a, String b) {

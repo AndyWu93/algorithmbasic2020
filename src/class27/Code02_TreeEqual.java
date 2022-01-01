@@ -2,6 +2,11 @@ package class27;
 
 import java.util.ArrayList;
 
+/**
+ * 有两个树big，small，判断small是否是big的子树
+ * 思路：序列化后kmp
+ * 序列化O(N),KMPO(N);总体复杂度O(N)
+ */
 public class Code02_TreeEqual {
 
 	public static class Node {
@@ -44,6 +49,12 @@ public class Code02_TreeEqual {
 				&& isSameValueStructure(head1.right, head2.right);
 	}
 
+	/**
+	 * 序列化后KMP
+	 * @param big
+	 * @param small
+	 * @return
+	 */
 	public static boolean containsTree2(Node big, Node small) {
 		if (small == null) {
 			return true;
