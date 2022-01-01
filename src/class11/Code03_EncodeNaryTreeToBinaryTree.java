@@ -82,11 +82,12 @@ public class Code03_EncodeNaryTreeToBinaryTree {
 					/*2. 第一个孩子给了head*/
 					head = tNode;
 				} else {
-					/*4. 其他孩子一路向右*/
+					/*3. 其他兄弟们一路向右（右边挂着兄弟）*/
 					cur.right = tNode;
 				}
-				/*3. 再对于二叉树的右边界的当前节点，处理左树的右边界*/
+				/*来到了当前的孩子*/
 				cur = tNode;
+				/*当前孩子的children，挂在左边。深度优先遍历（左边挂着孩子）*/
 				cur.left = en(child.children);
 			}
 			return head;
