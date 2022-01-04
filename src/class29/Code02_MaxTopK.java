@@ -2,10 +2,20 @@ package class29;
 
 import java.util.Arrays;
 
+/**
+ *给定一个无序数组arr中，长度为N，给定一个正数k，返回top k个最大的数
+ *
+ * 不同时间复杂度三个方法：
+ * 1）O(N*logN)
+ * 2）O(N + K*logN)
+ * 3）O(n + k*logk)
+ */
 public class Code02_MaxTopK {
 
-	// 时间复杂度O(N*logN)
-	// 排序+收集
+	/**
+	 * 时间复杂度O(N*logN)
+	 * 排序+收集
+	 */
 	public static int[] maxTopK1(int[] arr, int k) {
 		if (arr == null || arr.length == 0) {
 			return new int[0];
@@ -20,8 +30,12 @@ public class Code02_MaxTopK {
 		return ans;
 	}
 
-	// 方法二，时间复杂度O(N + K*logN)
-	// 解释：堆
+	/**
+	 * 方法二，时间复杂度O(N + K*logN)
+	 * 将arr从后往前，向下调整成大根堆O(N)
+	 * 弹出堆顶后，调整堆顶O(logN)
+	 * 弹k次
+	 */
 	public static int[] maxTopK2(int[] arr, int k) {
 		if (arr == null || arr.length == 0) {
 			return new int[0];
@@ -75,7 +89,13 @@ public class Code02_MaxTopK {
 		arr[j] = tmp;
 	}
 
-	// 方法三，时间复杂度O(n + k * logk)
+	/**
+	 * 最优
+	 * 方法三，时间复杂度O(n + k * logk)
+	 * 1.求出第n-k小的数，即第k大的数num O(N)
+	 * 2.遍历一遍arr，取出比num大的数，如果不足k个，剩下的位置都用num补上 O(N)
+	 * 3.对长度为k的arr'排序 O(K*logK)
+	 */
 	public static int[] maxTopK3(int[] arr, int k) {
 		if (arr == null || arr.length == 0) {
 			return new int[0];
