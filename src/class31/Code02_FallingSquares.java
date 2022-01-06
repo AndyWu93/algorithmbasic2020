@@ -5,6 +5,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.TreeSet;
 
+/**
+ * 在一个平面上，不断有方块落下,收集每落下一个方块后的最大高度
+ * 方块表示(x,y)：方块左边沿着x落下，方块的边长为y
+ * 思路：
+ * 	区间内累加后，求此时最大高度问题
+ * 1. 需要注意边界问题
+ * （1，3）沿着1，到4范围内增加了3，但是4是取不掉的，1和4只能取一个数，因为有方块贴合问题
+ * 所以这里一般都是1到3范围内都增加3
+ * 2. 用update不用add
+ * 为什么？假设此时来了一个方块(3,4)，那就是[3..6]范围内的最大高度假设6再加4，到了10，那么[3..6]范围内的数应该都变成10
+ */
 public class Code02_FallingSquares {
 
 	public static class SegmentTree {
