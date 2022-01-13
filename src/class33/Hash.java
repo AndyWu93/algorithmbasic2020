@@ -6,6 +6,9 @@ import java.security.Security;
 
 import javax.xml.bind.DatatypeConverter;
 
+/**
+ * java自带的HASH算法举例
+ */
 public class Hash {
 
 	private MessageDigest hash;
@@ -18,11 +21,15 @@ public class Hash {
 		}
 	}
 
+	/**
+	 * 这里拿到的是一个十六进制的数
+	 */
 	public String hashCode(String input) {
 		return DatatypeConverter.printHexBinary(hash.digest(input.getBytes())).toUpperCase();
 	}
 
 	public static void main(String[] args) {
+
 		System.out.println("支持的算法 : ");
 		for (String str : Security.getAlgorithms("MessageDigest")) {
 			System.out.println(str);
