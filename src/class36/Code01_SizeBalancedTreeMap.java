@@ -1,5 +1,41 @@
 package class36;
 
+/**
+ * 有序表之sizeBalancedTree（有序表中最推荐的一种结构）
+ *
+ * 平衡性定义：
+ * 	任何节点为头的树的节点总数，一定不少于他侄子节点为头的树的节点总数
+ * sb树的平衡性分析：
+ * 	        父
+ * 	       /  \
+ * 	      A   B
+ * 	     / \ / \
+ *		E  F G H
+ *     /\ /\/\/\
+ *    ..........
+ *  按照sb树平衡性的定义，
+ *  A.size>=G.size;A.size>=H.size,
+ *  所以B.size<=2*A.size
+ *  所以，SB树的左右树高度差不会超过2倍，平衡性虽然不及AVL,但整体高度仍然维持在logN水平
+ *
+ * SB树的违规类型
+ * LL：左树的左树节点数大于右树
+ * 	解决方案：当前节点右旋，右旋之后，当前节点以及新的头节点的size发生了变化，需要检查是否违规（递归调用）
+ * LR：左树的右树节点数大于右树
+ * RL：右树的左树节点数大于左树
+ * RR：右树的右树节点数大于左树
+ * 以上违规的解决方案整体和AVL树一样，不同点在于需要针对size发生变化的节点递归调整
+ * why递归调整？
+ * 	因为SB本身调整不是很频繁，但发生调整后，涉及size变化的节点可能也需要调整；不像AVL树，调整非常频繁，不会出现调整以后还有不平的情况
+ *
+ * SB的调整模式：
+ * 	加入一个节点x
+ * 		沿途所有size受到影响的节点都需要调整
+ *	删除一个节点x
+ *		本来删除是需要调整的，但是加入节点时会出现递归调整，所以删除节点时就不调了
+ *
+ *
+ */
 public class Code01_SizeBalancedTreeMap {
 
 	public static class SBTNode<K extends Comparable<K>, V> {
@@ -7,6 +43,7 @@ public class Code01_SizeBalancedTreeMap {
 		public V value;
 		public SBTNode<K, V> l;
 		public SBTNode<K, V> r;
+		/*这里是size，AVL是高度*/
 		public int size; // 不同的key的数量
 
 		public SBTNode(K key, V value) {
@@ -19,6 +56,9 @@ public class Code01_SizeBalancedTreeMap {
 	public static class SizeBalancedTreeMap<K extends Comparable<K>, V> {
 		private SBTNode<K, V> root;
 
+		/**
+		 * 左旋和右旋和AVL都差不多，只是这里交换和重新计算的是size，不是高度
+		 */
 		private SBTNode<K, V> rightRotate(SBTNode<K, V> cur) {
 			SBTNode<K, V> leftNode = cur.l;
 			cur.l = leftNode.r;
@@ -37,10 +77,14 @@ public class Code01_SizeBalancedTreeMap {
 			return rightNode;
 		}
 
+		/**
+		 * 平衡调整的补丁
+		 */
 		private SBTNode<K, V> maintain(SBTNode<K, V> cur) {
 			if (cur == null) {
 				return null;
 			}
+			/*把叔侄的节点数都拿出来*/
 			int leftSize = cur.l != null ? cur.l.size : 0;
 			int leftLeftSize = cur.l != null && cur.l.l != null ? cur.l.l.size : 0;
 			int leftRightSize = cur.l != null && cur.l.r != null ? cur.l.r.size : 0;
@@ -48,20 +92,24 @@ public class Code01_SizeBalancedTreeMap {
 			int rightLeftSize = cur.r != null && cur.r.l != null ? cur.r.l.size : 0;
 			int rightRightSize = cur.r != null && cur.r.r != null ? cur.r.r.size : 0;
 			if (leftLeftSize > rightSize) {
+				/*LL型，一次右旋，2次递归，调整完后可能换头，重新接住头*/
 				cur = rightRotate(cur);
 				cur.r = maintain(cur.r);
 				cur = maintain(cur);
 			} else if (leftRightSize > rightSize) {
+				/*LR型，一次左旋，3次递归，调整完后可能换头，重新接住头*/
 				cur.l = leftRotate(cur.l);
 				cur = rightRotate(cur);
 				cur.l = maintain(cur.l);
 				cur.r = maintain(cur.r);
 				cur = maintain(cur);
 			} else if (rightRightSize > leftSize) {
+				/*RR*/
 				cur = leftRotate(cur);
 				cur.l = maintain(cur.l);
 				cur = maintain(cur);
 			} else if (rightLeftSize > leftSize) {
+				/*RL*/
 				cur.r = rightRotate(cur.r);
 				cur = leftRotate(cur);
 				cur.l = maintain(cur.l);
@@ -128,12 +176,14 @@ public class Code01_SizeBalancedTreeMap {
 			if (cur == null) {
 				return new SBTNode<K, V>(key, value);
 			} else {
+				/*在cur为头的节点上加节点，size++*/
 				cur.size++;
 				if (key.compareTo(cur.key) < 0) {
 					cur.l = add(cur.l, key, value);
 				} else {
 					cur.r = add(cur.r, key, value);
 				}
+				/*左右加完节点后，本层的cur，平衡一下*/
 				return maintain(cur);
 			}
 		}
@@ -141,6 +191,7 @@ public class Code01_SizeBalancedTreeMap {
 		// 在cur这棵树上，删掉key所代表的节点
 		// 返回cur这棵树的新头部
 		private SBTNode<K, V> delete(SBTNode<K, V> cur, K key) {
+			/*cur为头的数size--*/
 			cur.size--;
 			if (key.compareTo(cur.key) > 0) {
 				cur.r = delete(cur.r, key);
@@ -157,6 +208,7 @@ public class Code01_SizeBalancedTreeMap {
 					// free cur memory -> C++
 					cur = cur.l;
 				} else { // 有左有右
+					/*找到cur的后继节点，来替cur*/
 					SBTNode<K, V> pre = null;
 					SBTNode<K, V> des = cur.r;
 					des.size--;
@@ -175,6 +227,7 @@ public class Code01_SizeBalancedTreeMap {
 					cur = des;
 				}
 			}
+			/*删除的时候，可调可不调，add方法会迅速调平，不影响复杂度*/
 			// cur = maintain(cur);
 			return cur;
 		}
