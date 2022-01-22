@@ -2,6 +2,14 @@ package class37;
 
 import java.util.ArrayList;
 
+/**
+ * 实现一个类似数组的结构，要求以下复杂度O(logN)
+ * add(index,v)：
+ * remove(index,v)：
+ * get(index)
+ * 思路：现有数组或者链表无法达到O(logN)，想要O(logN)只能用有序表
+ * 元素如何比较？元素可以通过index的值来比较
+ */
 public class Code03_AddRemoveGetIndexGreat {
 
 	public static class SBTNode<V> {

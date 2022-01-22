@@ -7,7 +7,7 @@ package class05;
  *
  * 优化：使用mergeSort
  * 首先生成一个前缀和预处理数组sum
- * 遍历数组arr，来到i位置，求以i位置结尾的子数组中，有多少个累加和落在lower,upper]上
+ * 遍历数组arr（注意这里是arr，不是sum），来到i位置，求以i位置结尾的子数组中，有多少个累加和落在lower,upper]上
  * 相当于求0..以i位置之前的数结尾的子数组中，有多少个累加和落在[sum[i]-upper,sum[i]-lower]上，以及以0..i位置的数结尾的子数组累加和是否落在[lower,upper]上
  * 借用归并排序加速
  * 在merge时：
@@ -17,6 +17,7 @@ package class05;
  * 将这些个数加起来就是题解
  *
  * 优化2：通过有序表解决
+ * 见class37.Code01_CountofRangeSum
  */
 // 这道题直接在leetcode测评：
 // https://leetcode.com/problems/count-of-range-sum/

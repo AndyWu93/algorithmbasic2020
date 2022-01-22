@@ -1,5 +1,18 @@
 package class37;
 
+/**
+ * 有一个数组arr、长度为k的窗口，求窗口右移时每一步窗口内的中位数
+ * 窗口内的中位数概念：
+ * 	窗口内总共奇数个数：假设排完序后，位于中间位置的数
+ * 	窗口内总共偶数数个数：假设排完序后，就是位于中间位置的2个数的平均值
+ * 解题：
+ * 	该结构需要满足的条件：
+ * 		1. 可以加入重复的数
+ * 		2. 可以求出位于index位置的数
+ * 		3. 可以删除位于index位置的数
+ * 	依然使用上一题的结构，在有序表中添加allSize
+ * 	这里用了一个更加方便的实现，用经典的有序表，将index也纳入比较，这样当value一样时也可以当成是不一样的数
+ */
 public class Code02_SlidingWindowMedian {
 
 	public static class SBTNode<K extends Comparable<K>> {
@@ -187,6 +200,9 @@ public class Code02_SlidingWindowMedian {
 
 	}
 
+	/**
+	 * 可比较的节点：value一样时，按index比较
+	 */
 	public static class Node implements Comparable<Node> {
 		public int index;
 		public int value;
@@ -206,13 +222,16 @@ public class Code02_SlidingWindowMedian {
 	public static double[] medianSlidingWindow(int[] nums, int k) {
 		SizeBalancedTreeMap<Node> map = new SizeBalancedTreeMap<>();
 		for (int i = 0; i < k - 1; i++) {
+			/*形成大小为K的窗口*/
 			map.add(new Node(i, nums[i]));
 		}
 		double[] ans = new double[nums.length - k + 1];
 		int index = 0;
+		/*从k-1位置开始，到数组最右边*/
 		for (int i = k - 1; i < nums.length; i++) {
 			map.add(new Node(i, nums[i]));
 			if (map.size() % 2 == 0) {
+				/*偶数个，取出中间的两个数*/
 				Node upmid = map.getIndexKey(map.size() / 2 - 1);
 				Node downmid = map.getIndexKey(map.size() / 2);
 				ans[index++] = ((double) upmid.value + (double) downmid.value) / 2;
@@ -220,6 +239,7 @@ public class Code02_SlidingWindowMedian {
 				Node mid = map.getIndexKey(map.size() / 2);
 				ans[index++] = (double) mid.value;
 			}
+			/*移除窗口左端*/
 			map.remove(new Node(i - k + 1, nums[i - k + 1]));
 		}
 		return ans;
