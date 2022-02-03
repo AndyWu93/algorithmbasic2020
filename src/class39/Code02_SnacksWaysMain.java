@@ -1,6 +1,24 @@
 //不要拷贝包信息的内容
 package class39;
 
+/**
+ * 牛牛家里一共有n袋零食, 第i袋零食体积为v[i]，背包容量为w。
+ * 牛牛想知道在总体积不超过背包容量的情况下,
+ * 一共有多少种零食放法，体积为0也算一种放法
+ * 1 <= n <= 30, 1 <= w <= 2 * 10^9
+ * v[i] (0 <= v[i] <= 10^9）
+ *
+ * 经典背包问题
+ * dp[i][j]:arr[0..i]位置自由选择，体积刚刚好达到j的方法数
+ * 规模dp[n][w+1]
+ * 这里有一个问题了，w的值非常大，因为arr[i]的范围就超过了10^8，所以这张表太大了，但是n很小，所以分治
+ * 左右分别计算得到一个有序map:(sum,方法数)
+ * 这里需要求总方法数，ways
+ * 先把左右两个map里的所有的方法数加到ways里
+ * 再枚举左右两个map，分别拿出一个sum，只要两个sum加起来不大于w，将两个方法数相乘，加到ways里
+ * 为什么相乘？
+ * 表示左边（sum，方法数）每一个方法都能和右边的每一个方法凑出新的方法
+ */
 //本文件是Code02_SnacksWays问题的牛客题目解答
 //但是用的分治的方法
 //这是牛客的测试链接：
@@ -33,11 +51,15 @@ public class Code02_SnacksWaysMain {
 		if (arr.length == 1) {
 			return arr[0] <= bag ? 2 : 1;
 		}
+		/*拿到中间位置*/
 		int mid = (arr.length - 1) >> 1;
 		TreeMap<Long, Long> lmap = new TreeMap<>();
+		/*左边收集map，并将方法数加到ways里*/
 		long ways = process(arr, 0, 0, mid, bag, lmap);
 		TreeMap<Long, Long> rmap = new TreeMap<>();
+		/*右边收集map，并将方法数加到ways里*/
 		ways += process(arr, mid + 1, 0, arr.length - 1, bag, rmap);
+		/*这里采用了右侧map前缀和加速*/
 		TreeMap<Long, Long> rpre = new TreeMap<>();
 		long pre = 0;
 		for (Entry<Long, Long> entry : rmap.entrySet()) {
@@ -53,6 +75,7 @@ public class Code02_SnacksWaysMain {
 				ways += lways * rways;
 			}
 		}
+		/*最右1种方法，是什么也不选*/
 		return ways + 1;
 	}
 
@@ -75,6 +98,7 @@ public class Code02_SnacksWaysMain {
 	// - - $ - 3 -> （0 : 1）(3, 2)
 	public static long func(int[] arr, int index, int end, long sum, long bag, TreeMap<Long, Long> map) {
 		if(sum > bag) {
+			/*不用收集，也不用计算*/
 			return 0;
 		}
 		// sum <= bag
@@ -88,6 +112,7 @@ public class Code02_SnacksWaysMain {
 				}
 				return 1;
 			} else {
+				/*一个也没选，这里不用收集*/
 				return 0;
 			}			
 		}
