@@ -1,5 +1,9 @@
 package class40;
 
+/**
+ * 矩阵计算技巧之分圈计算。
+ * 一个圈包含了两层
+ */
 public class Code08_PrintStar {
 
 	public static void printStar(int N) {

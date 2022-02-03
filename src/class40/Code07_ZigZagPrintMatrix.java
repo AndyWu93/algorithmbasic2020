@@ -1,5 +1,12 @@
 package class40;
 
+/**
+ * 矩阵计算技巧之宏观调度
+ * 两个点A/B从左上角位置走到右下角。
+ * A先往右再往下
+ * B先往下再往右
+ * AB每次移动后之间的连线就是调度过程。只是有时是A到B，有时是B到A
+ */
 public class Code07_ZigZagPrintMatrix {
 
 	public static void printMatrixZigZag(int[][] matrix) {

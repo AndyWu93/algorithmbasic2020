@@ -2,6 +2,12 @@ package class40;
 
 import java.util.TreeMap;
 
+/**
+ * 给定一个数组arr，给定一个值v
+ * 求子数组平均值小于等于v的最长子数组长度
+ * 解题：
+ * 	将arr每个值减去v，得到arr'，题目就可以转化为求arr'中累加和小于等于0的最长子数组长度。
+ */
 public class Code04_AvgLessEqualValueLongestSubarray {
 
 	// 暴力解，时间复杂度O(N^3)，用于做对数器

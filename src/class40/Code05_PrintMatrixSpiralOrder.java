@@ -1,5 +1,10 @@
 package class40;
 
+/**
+ * 矩阵计算技巧之分圈计算。
+ *
+ * 转圈打印
+ */
 public class Code05_PrintMatrixSpiralOrder {
 
 	public static void spiralOrderPrint(int[][] matrix) {
@@ -7,6 +12,7 @@ public class Code05_PrintMatrixSpiralOrder {
 		int tC = 0;
 		int dR = matrix.length - 1;
 		int dC = matrix[0].length - 1;
+		/*两个点定位一个圈，打印完这一圈后，缩小打印里面一个圈*/
 		while (tR <= dR && tC <= dC) {
 			printEdge(matrix, tR++, tC++, dR--, dC--);
 		}
