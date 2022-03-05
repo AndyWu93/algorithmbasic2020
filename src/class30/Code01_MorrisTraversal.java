@@ -17,6 +17,7 @@ package class30;
  * 遍历顺序为morris序，特点：
  * 对于任意节点如果有左树，会达到两次，第二次的时候该节点的左树已经遍历完了
  * 对于任意节点如果没有左树，会达到一次
+ * 总结：头左头右
  * morris序实质：
  * 用当前节点左树的最右节点的右指针当前的状态，来标记是第一次还是第二次来到当前节点
  *
@@ -54,7 +55,7 @@ public class Code01_MorrisTraversal {
 		if (head == null) {
 			return;
 		}
-		/*morris只需要连个变量，cur先指向头节点*/
+		/*morris只需要两个变量，cur先指向头节点*/
 		Node cur = head;
 		Node mostRight = null;
 		/*只有cur不等于空，就可以继续遍历*/
