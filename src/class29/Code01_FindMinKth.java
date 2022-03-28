@@ -85,7 +85,8 @@ public class Code01_FindMinKth {
 	/**
 	 * master公式：T(N) = T(N/2) + O(N)
 	 * 求得复杂度O(N)
-	 * process递归改成迭代？见class29.Code02_MaxTopK#minKth(int[], int)
+	 * process递归改成迭代？
+	 * @see class29.Code02_MaxTopK#minKth(int[], int)
 	 */
 	// arr 第k小的数
 	// process2(arr, 0, N-1, k-1)
